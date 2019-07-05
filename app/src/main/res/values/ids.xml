@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="fab_machine" type="id" />
+    <item name="fab_exercise" type="id" />
+    <item name="fab_workout" type="id" />
+</resources>

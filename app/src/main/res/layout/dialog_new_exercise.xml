@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogNewExercise"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/colorDarkYellow"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:paddingStart="24sp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@drawable/exercise" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="@string/new_exercise"
+            android:textColor="@color/colorAccentText"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:paddingHorizontal="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_machine_days_exercise"
+            android:textColor="@color/colorPrimaryText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp">
+
+        <Spinner
+            android:id="@+id/spExerciseMachine"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:padding="8dp">
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseSunday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:foregroundTint="@color/colorAccent" />
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseMonday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@id/cbNewExerciseSunday"
+            android:foregroundTint="@color/colorAccent" />
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseTuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@id/cbNewExerciseMonday"
+            android:foregroundTint="@color/colorAccent" />
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseWednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@id/cbNewExerciseTuesday"
+            android:foregroundTint="@color/colorAccent"/>
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseThursday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@id/cbNewExerciseWednesday"
+            android:foregroundTint="@color/colorAccent"/>
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseFriday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@id/cbNewExerciseThursday"
+            android:foregroundTint="@color/colorAccent" />
+
+        <CheckBox
+            android:id="@+id/cbNewExerciseSaturday"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@id/cbNewExerciseFriday"
+            android:foregroundTint="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseSunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseSunday"
+            android:layout_alignStart="@id/cbNewExerciseSunday"
+            android:layout_marginHorizontal="11dp"
+            android:text="@string/sunday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseMonday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseMonday"
+            android:layout_marginHorizontal="11dp"
+            android:layout_toRightOf="@id/tvNewExerciseSunday"
+            android:text="@string/monday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseTuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseTuesday"
+            android:layout_marginHorizontal="11dp"
+            android:layout_toRightOf="@id/tvNewExerciseMonday"
+            android:text="@string/tuesday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseWednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseWednesday"
+            android:layout_marginHorizontal="11dp"
+            android:layout_toRightOf="@id/tvNewExerciseTuesday"
+            android:text="@string/wednesday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseThursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseThursday"
+            android:layout_marginHorizontal="11dp"
+            android:layout_toRightOf="@id/tvNewExerciseWednesday"
+            android:text="@string/thursday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseFriday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseFriday"
+            android:layout_marginHorizontal="11dp"
+            android:layout_toRightOf="@id/tvNewExerciseThursday"
+            android:text="@string/friday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvNewExerciseSaturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbNewExerciseSaturday"
+            android:layout_marginHorizontal="11dp"
+            android:layout_toRightOf="@id/tvNewExerciseFriday"
+            android:text="@string/saturday_abv"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/btDialogNewExerciseCancel"
+            style="@style/luiz_btn_inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:fontFamily="sans-serif-medium"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="@string/cancel_caps"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btDialogNewExerciseSave"
+            style="@style/luiz_btn_inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:fontFamily="sans-serif-medium"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="@string/save_caps"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

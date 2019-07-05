@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Activities.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lvWorkouts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark" />
+
+        <!--<com.leinardi.android.speeddial.SpeedDialOverlayLayout-->
+        <!--android:id="@+id/overlay"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:clickable_overlay="true" />-->
+
+        <com.leinardi.android.speeddial.SpeedDialView
+            android:id="@+id/btNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorYellow"
+            app:layout_anchor="@id/lvWorkouts"
+            app:layout_anchorGravity="bottom|right|end"
+            app:sdExpansionMode="top"
+            app:sdMainFabAnimationRotateAngle="90"
+            app:sdMainFabClosedSrc="@drawable/plus"
+            app:sdMainFabOpenedSrc="@drawable/close" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

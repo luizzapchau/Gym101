@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvWorkoutDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/date"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWorkoutExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/exercise_name"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWorkoutSets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sets"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWorkoutRepetitions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/repetetions"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWorkoutWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/weight"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWorkoutTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWorkoutDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/distance"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvWorkoutId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="id"
+        android:visibility="gone" />
+
+</LinearLayout>
