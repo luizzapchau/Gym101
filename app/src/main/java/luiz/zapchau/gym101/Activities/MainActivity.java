@@ -1,12 +1,18 @@
 package luiz.zapchau.gym101.Activities;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +29,6 @@ import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSpeedDial(boolean addActionItems) {
+        speedDialView.setTransitionName("reveal");
+
         if(addActionItems){
             speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_workout, R.drawable.workout)
                     .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightGreen, getTheme()))
@@ -117,16 +124,27 @@ public class MainActivity extends AppCompatActivity {
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
                 switch (speedDialActionItem.getId()) {
                     case R.id.fab_workout:
-                        //todo load new workout activity
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            //todo add animation
+                            startActivity(new Intent(mContext, NewWorkoutActivity.class));
+
+                        } else {
+                            startActivity(new Intent(mContext, NewWorkoutActivity.class));
+                        }
+
                         speedDialView.close();
+
                         return true;
                     case R.id.fab_exercise:
                         initNewExerciseDialog();
                         speedDialView.close();
+
                         return true;
                     case R.id.fab_machine:
                         initNewMachineDialog();
                         speedDialView.close();
+
                         return true;
                     default:
                         return false;
@@ -136,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initNewMachineDialog(){
-
         final Dialog dialogNewMachine = new Dialog(this);
 
         dialogNewMachine.setContentView(R.layout.dialog_new_machine);
@@ -185,8 +202,7 @@ public class MainActivity extends AppCompatActivity {
         btNewMachineSave.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(!validMachine(Objects.requireNonNull(tilNewMachineNumber.getText()).toString(), tilNewMachineName.getText().toString())) {
+                if (!validMachine(Objects.requireNonNull(tilNewMachineNumber.getText()).toString(), tilNewMachineName.getText().toString())) {
                     Toast.makeText(mContext, getResources().getString(R.string.all_fields_must_filled), Toast.LENGTH_LONG).show();
                 } else {
                     sqLiteHelper.insertMachineData(Integer.parseInt(tilNewMachineNumber.getText().toString()),
@@ -217,14 +233,9 @@ public class MainActivity extends AppCompatActivity {
 
         final Spinner spNewExerciseMachine = ButterKnife.findById(dialogNewExercise, R.id.spExerciseMachine);
 
-        try {
-            ArrayAdapter<StringWithTag> spAdapter = new ArrayAdapter<>(mContext, R.layout.spinner_item, sqLiteHelper.selectAllMachine());
-            spAdapter.setDropDownViewResource(R.layout.spinner_item);
-            spNewExerciseMachine.setAdapter(spAdapter);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        ArrayAdapter<StringWithTag> spAdapter = new ArrayAdapter<>(mContext, R.layout.spinner_item, sqLiteHelper.selectAllMachineSpinner());
+        spAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spNewExerciseMachine.setAdapter(spAdapter);
 
         spNewExerciseMachine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -255,7 +266,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //todo save exercise
+                String exerciseDays = "|";
+
+                if(cbNewExerciseSunday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.sunday_db) + "|");
+
+                if(cbNewExerciseMonday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.monday_db) + "|");
+
+                if(cbNewExerciseTuesday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.tuesday_db) + "|");
+
+                if(cbNewExerciseWednesday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.wednesday_db) + "|");
+
+                if(cbNewExerciseThursday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.thursday_db) + "|");
+
+                if(cbNewExerciseFriday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.friday_db) + "|");
+
+                if(cbNewExerciseSaturday.isChecked())
+                    exerciseDays.concat(getResources().getString(R.string.saturday_db) + "|");
+
+                if(!sqLiteHelper.insertExerciseData(machineID[0], exerciseDays)){
+                    Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mContext, getResources().getString(R.string.exercise_save_success), Toast.LENGTH_LONG).show();
+                    dialogNewExercise.dismiss();
+                }
             }
         });
 

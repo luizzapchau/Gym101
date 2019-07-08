@@ -8,17 +8,26 @@
     <string name="machine_save_success">Machine saved with success.</string>
     <string name="all_fields_must_filled">All fields must be filled.</string>
     <string name="select_machine_days_exercise">Select a machine and days for the exercise.</string>
+    <string name="exercise_save_success">Exercise saved with success.</string>
+    <string name="something_wrong">Something went wrong. Please try again.</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>
     <string name="machine_name_db">machinename</string>
     <string name="machine_number_db">machinenumber</string>
+    <string name="monday_db">mon</string>
+    <string name="tuesday_db">tue</string>
+    <string name="wednesday_db">wed</string>
+    <string name="thursday_db">thu</string>
+    <string name="friday_db">fri</string>
+    <string name="saturday_db">sat</string>
+    <string name="sunday_db">sun</string>
 
     <!--general==========================================================================-->
     <string name="date">Date</string>
     <string name="exercise_name">Exercise name</string>
     <string name="sets">Sets</string>
-    <string name="repetetions">Repetitions</string>
+    <string name="repetitions">Repetitions</string>
     <string name="weight">Weight</string>
     <string name="distance">Distance</string>
     <string name="time">Time</string>
@@ -46,6 +55,7 @@
     <string name="thursday_abv">T</string>
     <string name="friday_abv">F</string>
     <string name="saturday_abv">S</string>
+
 
     <!--==========================================================================-->
 </resources>

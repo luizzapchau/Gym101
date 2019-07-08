@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +17,6 @@ import java.util.List;
 import luiz.zapchau.gym101.Model.StringWithTag;
 
 public class SQLiteHelper extends SQLiteOpenHelper{
-
     private static final String DB_NAME = "gym.db";
 
     private static final String TB_MACHINE     = "machine";
@@ -55,14 +53,16 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     private static final String WEIGHT_DATE  = "weightdate";
     private static final String WEIGHT_VALUE = "weightvalue";
 
-    public SQLiteHelper(Context context) {
+    SQLiteDatabase db;
 
+    public SQLiteHelper(Context context) {
         super(context, DB_NAME, null, 1);
+
+        this.db = this.getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db){
-
         String createTableMachine   = "CREATE TABLE " + TB_MACHINE + "(" +
                                       MACHINE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                       MACHINE_NUMBER + " INTEGER, " +
@@ -110,7 +110,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         db.execSQL("DROP TABLE IF EXISTS " + TB_MACHINE);
         db.execSQL("DROP TABLE IF EXISTS " + TB_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TB_EXERCISE);
@@ -120,11 +119,10 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
+    //region insert
     public boolean insertMachineData(int number, String name, String color) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(MACHINE_NUMBER, number);
         contentValues.put(MACHINE_NAME, name);
         contentValues.put(MACHINE_COLOR, color);
@@ -133,10 +131,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean insertUserData(String name, int age, float height, float weight, int timesWeek) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(USER_NAME, name);
         contentValues.put(USER_AGE, age);
         contentValues.put(USER_HEIGHT, height);
@@ -152,10 +148,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean insertExerciseData(int machine, String days) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(EXERCISE_MACHINE, machine);
         contentValues.put(EXERCISE_DAYS, days);
 
@@ -163,10 +157,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean insertWorkoutData(String date, int exercise, int sets, int repetitions, float weight, String time, float distance) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(WORKOUT_DATE, date);
         contentValues.put(WORKOUT_EXERCISE, exercise);
         contentValues.put(WORKOUT_SETS, sets);
@@ -179,20 +171,17 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean insertWeightData(String date, float value) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(WEIGHT_DATE, date);
         contentValues.put(WEIGHT_VALUE, value);
 
         return db.insert(TB_WEIGHT, null, contentValues) != -1;
     }
+    //endregion
 
+    //region select
     public JSONObject selectMachine(int id) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         String select = "SELECT * " +
                         "FROM " + TB_MACHINE +
                         " WHERE " + MACHINE_ID + " = " + id;
@@ -203,9 +192,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public JSONObject selectUser(int id) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         String select = "SELECT * " +
                         "FROM " + TB_USER +
                         " WHERE " + USER_ID + " = " + id;
@@ -216,9 +202,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public JSONObject selectExercise(int id) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         String select = "SELECT * " +
                         "FROM " + TB_EXERCISE +
                         " WHERE " + EXERCISE_ID + " = " + id;
@@ -229,9 +212,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public JSONObject selectWorkout(int id) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         String select = "SELECT * " +
                         "FROM " + TB_WORKOUT +
                         " WHERE " + WORKOUT_ID + " = " + id;
@@ -241,29 +221,25 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         return cursorToJSO(mCursor);
     }
 
-    public List<StringWithTag> selectAllMachine() throws JSONException {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        List<StringWithTag> machineList = new ArrayList<>();
-
+    public List<StringWithTag> selectAllMachineSpinner() {
         String select = "SELECT * " +
                         "FROM " + TB_MACHINE +
                         " ORDER BY " + MACHINE_NUMBER;
 
-        JSONArray jaMachines = cursorToJSA(sqLiteDatabase.rawQuery(select, null));
+        return cursorToList(db.rawQuery(select, null));
+    }
 
-        for(int i = 0; i < jaMachines.length(); i++) {
-            JSONObject mObject = jaMachines.getJSONObject(i);
+    public List<StringWithTag> selectAllExerciseSpinner(){
+        String select = "SELECT " + TB_MACHINE + "." + EXERCISE_ID + ", " + EXERCISE_MACHINE + ", " + MACHINE_NAME +
+                        ", " + EXERCISE_DAYS + ", " + MACHINE_NUMBER +
+                        " FROM " + TB_EXERCISE +
+                        " JOIN " + TB_MACHINE +
+                        " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID;
 
-            machineList.add(new StringWithTag(mObject.getInt(MACHINE_NUMBER) + " - " + mObject.getString(MACHINE_NAME),
-                    mObject.getInt(MACHINE_ID)));
-        }
-
-        return machineList;
+        return cursorToList(db.rawQuery(select, null));
     }
 
     public JSONArray selectAllWorkout() {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
         String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + TB_MACHINE + "." + MACHINE_NUMBER +
                         ", " + TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_COLOR +
                         ", " + WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME +
@@ -275,24 +251,22 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                         " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID +
                         " ORDER BY " + WORKOUT_DATE + " DESC";
 
-        return cursorToJSA(sqLiteDatabase.rawQuery(select, null));
+        return cursorToJSA(db.rawQuery(select, null));
     }
 
     public JSONArray selectAllWeight() {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
         String select = "SELECT * " +
                         " FROM " + TB_WEIGHT +
                         " ORDER BY " + WEIGHT_DATE;
 
-        return cursorToJSA(sqLiteDatabase.rawQuery(select, null));
+        return cursorToJSA(db.rawQuery(select, null));
     }
+    //endregion
 
+    //region update
     public boolean updateUser(int id, String name, int age, float height, float weight, int timesWeek){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(USER_NAME, name);
         contentValues.put(USER_AGE, age);
         contentValues.put(USER_HEIGHT, height);
@@ -308,10 +282,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean updateMachine(int id, int number, String name, String color){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(MACHINE_NUMBER, number);
         contentValues.put(MACHINE_NAME, name);
         contentValues.put(MACHINE_COLOR, color);
@@ -320,10 +292,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean updateExercise(int id, int machine, String days){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(EXERCISE_MACHINE, machine);
         contentValues.put(EXERCISE_DAYS, days);
 
@@ -334,10 +304,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public boolean updateWorkout(int id, String date, int exercise, int sets, int repetitions, float weight, String time, float distance){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
+
         contentValues.put(WORKOUT_DATE, date);
         contentValues.put(WORKOUT_EXERCISE, exercise);
         contentValues.put(WORKOUT_SETS, sets);
@@ -348,11 +316,10 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
         return db.update(TB_WORKOUT, contentValues, WORKOUT_ID + " = ? ", new String[]{Integer.toString(id)}) != -1;
     }
+    //endregion
 
+    //region delete
     public void wipeDB() {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         db.delete(TB_MACHINE, null, null);
         db.delete(TB_USER, null, null);
         db.delete(TB_EXERCISE, null, null);
@@ -361,24 +328,25 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public void deleteMachineEntry(int id){
-        this.getWritableDatabase().delete(TB_WEIGHT, MACHINE_ID + " = ? ", new String[]{Integer.toString(id)});
+        db.delete(TB_WEIGHT, MACHINE_ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
     public void deleteExerciseEntry(int id){
-        this.getWritableDatabase().delete(TB_EXERCISE, EXERCISE_ID + " = ? ", new String[]{Integer.toString(id)});
+        db.delete(TB_EXERCISE, EXERCISE_ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
     public void deleteWorkoutEntry(int id){
-        this.getWritableDatabase().delete(TB_WORKOUT, WORKOUT_ID + " = ? ", new String[]{Integer.toString(id)});
+        db.delete(TB_WORKOUT, WORKOUT_ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
     public void deleteWeightEntry(int id){
-        this.getWritableDatabase().delete(TB_WEIGHT, WEIGHT_ID + " = ? ", new String[]{Integer.toString(id)});
+        db.delete(TB_WEIGHT, WEIGHT_ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
     public void deleteAllWeightData() {
-        this.getWritableDatabase().delete(TB_WEIGHT, WEIGHT_ID + " != ? ", new String[]{Integer.toString(0)});
+        db.delete(TB_WEIGHT, WEIGHT_ID + " != ? ", new String[]{Integer.toString(0)});
     }
+    //endregion
 
     private String getDate(){
         return new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime());
@@ -418,10 +386,26 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         return jsonArray;
     }
 
+    private List<StringWithTag> cursorToList(Cursor mCursor) {
+        List<StringWithTag> mList = new ArrayList<>();
+
+        JSONArray mArray = cursorToJSA(mCursor);
+
+        try {
+            for (int i = 0; i < mArray.length(); i++) {
+                JSONObject mObject = mArray.getJSONObject(i);
+
+                mList.add(new StringWithTag(mObject.getInt(MACHINE_NUMBER) + " - " + mObject.getString(MACHINE_NAME),
+                        mObject.getInt(MACHINE_ID)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return mList;
+    }
+
     public void temp(){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
         db.execSQL("drop table train");
     }
 }

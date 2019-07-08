@@ -33,7 +33,6 @@ public class Workout {
     }
 
     public static ArrayList<Workout> fromJson(JSONArray jsonObjects) {
-
         ArrayList<Workout> workout = new ArrayList<>();
 
         for (int i = 0; i < jsonObjects.length(); i++) {
