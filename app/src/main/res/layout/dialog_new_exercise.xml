@@ -57,7 +57,8 @@
         <Spinner
             android:id="@+id/spExerciseMachine"
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:popupBackground="@null" />
 
     </LinearLayout>
 
@@ -92,14 +93,14 @@
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_toRightOf="@id/cbNewExerciseTuesday"
-            android:foregroundTint="@color/colorAccent"/>
+            android:foregroundTint="@color/colorAccent" />
 
         <CheckBox
             android:id="@+id/cbNewExerciseThursday"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_toRightOf="@id/cbNewExerciseWednesday"
-            android:foregroundTint="@color/colorAccent"/>
+            android:foregroundTint="@color/colorAccent" />
 
         <CheckBox
             android:id="@+id/cbNewExerciseFriday"

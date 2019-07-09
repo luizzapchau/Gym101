@@ -1,18 +1,14 @@
 package luiz.zapchau.gym101.Activities;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,11 +40,11 @@ import luiz.zapchau.gym101.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.lvWorkouts) ListView lvWorkouts;
-    @BindView(R.id.btNew) SpeedDialView speedDialView;
+    @BindView(R.id.lvWorkouts) ListView      lvWorkouts;
+    @BindView(R.id.btNew)      SpeedDialView speedDialView;
 
     private SQLiteHelper sqLiteHelper;
-    private Context mContext;
+    private Context      mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void addWorkoutToList(JSONArray workoutList){
         ArrayList<Workout> arrayOfShows = new ArrayList<>();
-        WorkoutAdapter adapter = new WorkoutAdapter(this, arrayOfShows);
+        WorkoutAdapter     adapter      = new WorkoutAdapter(this, arrayOfShows);
+        ArrayList<Workout> newShow      = Workout.fromJson(workoutList);
+
         lvWorkouts.setAdapter(adapter);
-        ArrayList<Workout> newShow = Workout.fromJson(workoutList);
-        adapter.addAll(newShow);
+        adapter   .addAll(newShow);
     }
 
     @Override
@@ -102,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private void initSpeedDial(boolean addActionItems) {
         speedDialView.setTransitionName("reveal");
 
-        if(addActionItems){
+        if (addActionItems) {
             speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_workout, R.drawable.workout)
                     .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightGreen, getTheme()))
                     .setLabel(mContext.getResources().getString(R.string.new_workout))
@@ -124,11 +121,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
                 switch (speedDialActionItem.getId()) {
                     case R.id.fab_workout:
-
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             //todo add animation
                             startActivity(new Intent(mContext, NewWorkoutActivity.class));
-
                         } else {
                             startActivity(new Intent(mContext, NewWorkoutActivity.class));
                         }
@@ -159,12 +154,12 @@ public class MainActivity extends AppCompatActivity {
         dialogNewMachine.setContentView(R.layout.dialog_new_machine);
 
         final ImageView ivNewMachineColor = ButterKnife.findById(dialogNewMachine, R.id.ivNewMachineColor);
-        final Spinner spNewMachineColor = ButterKnife.findById(dialogNewMachine, R.id.spNewMachineColor);
+        final Spinner   spNewMachineColor = ButterKnife.findById(dialogNewMachine, R.id.spNewMachineColor);
 
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, new String[]{getString(R.string.blue), getString(R.string.green), getString(R.string.orange), getString(R.string.red)});
 
-        mAdapter.setDropDownViewResource(R.layout.spinner_item);
+        mAdapter         .setDropDownViewResource(R.layout.spinner_item);
         spNewMachineColor.setAdapter(mAdapter);
 
         spNewMachineColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -227,14 +222,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initNewExerciseDialog() {
         final Dialog dialogNewExercise = new Dialog(this);
-        final int[] machineID = new int[1];
+        final int[]  machineId         = new int[1];
 
         dialogNewExercise.setContentView(R.layout.dialog_new_exercise);
 
-        final Spinner spNewExerciseMachine = ButterKnife.findById(dialogNewExercise, R.id.spExerciseMachine);
+        final Spinner               spNewExerciseMachine = ButterKnife.findById(dialogNewExercise, R.id.spExerciseMachine);
+        ArrayAdapter<StringWithTag> spAdapter            = new ArrayAdapter<>(mContext, R.layout.spinner_item, sqLiteHelper.selectAllMachineSpinner());
 
-        ArrayAdapter<StringWithTag> spAdapter = new ArrayAdapter<>(mContext, R.layout.spinner_item, sqLiteHelper.selectAllMachineSpinner());
-        spAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spAdapter           .setDropDownViewResource(R.layout.spinner_item);
         spNewExerciseMachine.setAdapter(spAdapter);
 
         spNewExerciseMachine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -242,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 StringWithTag swt = (StringWithTag) parent.getItemAtPosition(position);
 
-                machineID[0] = (Integer) swt.tag;
+                machineId[0] = (Integer) swt.tag;
             }
 
             @Override
@@ -265,31 +260,30 @@ public class MainActivity extends AppCompatActivity {
         btNewExerciseSave.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String exerciseDays = "|";
 
-                if(cbNewExerciseSunday.isChecked())
+                if (cbNewExerciseSunday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.sunday_db) + "|");
 
-                if(cbNewExerciseMonday.isChecked())
+                if (cbNewExerciseMonday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.monday_db) + "|");
 
-                if(cbNewExerciseTuesday.isChecked())
+                if (cbNewExerciseTuesday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.tuesday_db) + "|");
 
-                if(cbNewExerciseWednesday.isChecked())
+                if (cbNewExerciseWednesday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.wednesday_db) + "|");
 
-                if(cbNewExerciseThursday.isChecked())
+                if (cbNewExerciseThursday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.thursday_db) + "|");
 
-                if(cbNewExerciseFriday.isChecked())
+                if (cbNewExerciseFriday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.friday_db) + "|");
 
-                if(cbNewExerciseSaturday.isChecked())
+                if (cbNewExerciseSaturday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.saturday_db) + "|");
 
-                if(!sqLiteHelper.insertExerciseData(machineID[0], exerciseDays)){
+                if (!sqLiteHelper.insertExerciseData(machineId[0], exerciseDays)) {
                     Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(mContext, getResources().getString(R.string.exercise_save_success), Toast.LENGTH_LONG).show();
@@ -312,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean validMachine(String newMachineNumber, String newMachineName){
         boolean isValidMachine;
 
-        if(!newMachineNumber.isEmpty()) {
+        if (!newMachineNumber.isEmpty()) {
             isValidMachine = !newMachineName.isEmpty();
         } else {
             isValidMachine = false;
@@ -321,3 +315,4 @@ public class MainActivity extends AppCompatActivity {
         return isValidMachine;
     }
 }
+

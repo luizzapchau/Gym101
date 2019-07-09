@@ -3,33 +3,300 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorPrimary"
+    android:orientation="vertical"
     tools:context=".Activities.NewWorkoutActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="56dp"
         android:background="@color/colorDarkYellow"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:padding="12dp"
-        android:paddingStart="24sp">
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_new_workout_close"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:scaleType="center"
-            android:src="@drawable/workout" />
+            android:src="@drawable/close" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="32dp"
+            android:layout_toRightOf="@+id/iv_new_workout_close"
             android:text="@string/new_workout"
             android:textColor="@color/colorAccentText"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/bt_new_workout_save"
+            style="@style/luiz_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="end"
+            android:fontFamily="sans-serif-medium"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="@string/save_caps"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilNewWorkoutDateLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:minWidth="200dp"
+            android:paddingHorizontal="24dp"
+            android:textColorHint="@color/colorPrimaryText">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/tieNewWorkoutDate"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/colorPrimaryText"
+                android:drawableStart="@drawable/calendar"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/colorAccent"
+                android:ellipsize="start"
+                android:focusable="false"
+                android:hint="@string/date"
+                android:inputType="date"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="16sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp">
+
+            <Spinner
+                android:id="@+id/spNewWorkoutMachine"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+
+                android:popupBackground="@null" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSetsRepetitions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilNewWorkoutSetsLayout"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="24dp"
+                android:textColorHint="@color/colorPrimaryText">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tieNewWorkoutSets"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/colorPrimaryText"
+                    android:ellipsize="start"
+                    android:hint="@string/sets"
+                    android:inputType="number"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/close"
+                android:tint="@color/colorAccent" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilNewWorkoutRepetitionsLayout"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="24dp"
+                android:textColorHint="@color/colorPrimaryText">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tieNewWorkoutRepetitions"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/colorPrimaryText"
+                    android:ellipsize="start"
+                    android:hint="@string/repetitions"
+                    android:inputType="number"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llTimeDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilNewWorkoutTimeLayout"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="24dp"
+                android:textColorHint="@color/colorPrimaryText">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tieNewWorkoutTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/colorPrimaryText"
+                    android:ellipsize="start"
+                    android:hint="@string/time"
+                    android:inputType="time"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/close"
+                android:tint="@color/colorAccent" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilNewWorkoutDistanceLayout"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="24dp"
+                android:textColorHint="@color/colorPrimaryText">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tieNewWorkoutDistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/colorPrimaryText"
+                    android:ellipsize="start"
+                    android:hint="@string/distance"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/llNewWorkoutWeightSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilNewWorkoutWeightLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:textColorHint="@color/colorPrimaryText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tieNewWorkoutWeight"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:backgroundTint="@color/colorPrimaryText"
+                        android:ellipsize="start"
+                        android:gravity="center"
+                        android:hint="@string/weight"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="24dp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilNewWorkoutSpeedLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:textColorHint="@color/colorPrimaryText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tieNewWorkoutSpeed"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:backgroundTint="@color/colorPrimaryText"
+                        android:ellipsize="start"
+                        android:gravity="center"
+                        android:hint="@string/speed"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="24dp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvNewWorkoutUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/llNewWorkoutWeightSpeed"
+                android:layout_toRightOf="@+id/llNewWorkoutWeightSpeed"
+                android:text="Kg"
+                android:textColor="@color/colorAccent"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

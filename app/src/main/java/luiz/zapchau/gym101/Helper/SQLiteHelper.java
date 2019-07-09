@@ -87,7 +87,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         String createTableWorkout  = "CREATE TABLE " + TB_WORKOUT + "(" +
                                      WORKOUT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                      WORKOUT_DATE + " TEXT NOT NULL, " +
-                                     WORKOUT_EXERCISE + " INTEGER NOT NULL, " +
+                                     WORKOUT_EXERCISE + " INTEGER, " +
                                      WORKOUT_SETS + " INTEGER, " +
                                      WORKOUT_REPETITIONS + " INTEGER, " +
                                      WORKOUT_WEIGHT + " REAL, " +
@@ -406,6 +406,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public void temp(){
-        db.execSQL("drop table train");
+        db.execSQL("drop table workout");
     }
 }

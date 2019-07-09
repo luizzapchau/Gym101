@@ -10,6 +10,7 @@
     <string name="select_machine_days_exercise">Select a machine and days for the exercise.</string>
     <string name="exercise_save_success">Exercise saved with success.</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
+    <string name="data_lost_leave">All data provided will be lost. Leave anyway?</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>
@@ -55,6 +56,13 @@
     <string name="thursday_abv">T</string>
     <string name="friday_abv">F</string>
     <string name="saturday_abv">S</string>
+    <string name="treadmill">treadmill</string>
+    <string name="speed">Speed</string>
+    <string name="kg">Kg</string>
+    <string name="km_h">Km/h</string>
+    <string name="yes">Yes</string>
+    <string name="yes_caps">YES</string>
+    <string name="no_caps">NO</string>
 
 
     <!--==========================================================================-->
