@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
@@ -27,7 +28,6 @@ import com.leinardi.android.speeddial.SpeedDialView;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -191,20 +191,23 @@ public class MainActivity extends AppCompatActivity {
         Button btNewMachineSave   = ButterKnife.findById(dialogNewMachine, R.id.btDialogNewMachineSave);
         Button btNewMachineCancel = ButterKnife.findById(dialogNewMachine, R.id.btDialogNewMachineCancel);
 
-        final TextInputEditText tilNewMachineNumber = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineNumber);
-        final TextInputEditText tilNewMachineName   = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineName);
+        final TextInputEditText tieNewMachineNumber       = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineNumber);
+        final TextInputEditText tieNewMachineName         = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineName);
+        final TextInputLayout   tilNewMachineNameLayout   = ButterKnife.findById(dialogNewMachine, R.id.tilNewMachineNameLayout);
 
         btNewMachineSave.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!validMachine(Objects.requireNonNull(tilNewMachineNumber.getText()).toString(), tilNewMachineName.getText().toString())) {
-                    Toast.makeText(mContext, getResources().getString(R.string.all_fields_must_filled), Toast.LENGTH_LONG).show();
-                } else {
-                    sqLiteHelper.insertMachineData(Integer.parseInt(tilNewMachineNumber.getText().toString()),
-                            tilNewMachineName.getText().toString(), spNewMachineColor.getSelectedItem().toString().toLowerCase());
+                if (!tieNewMachineName.getText().toString().isEmpty()) {
+                    sqLiteHelper.insertMachineData(Integer.parseInt(tieNewMachineNumber.getText().toString()),
+                            tieNewMachineName.getText().toString(), spNewMachineColor.getSelectedItem().toString().toLowerCase());
 
                     Toast.makeText(mContext, getResources().getString(R.string.machine_save_success), Toast.LENGTH_LONG).show();
                     dialogNewMachine.dismiss();
+                } else {
+                    tilNewMachineNameLayout.setError(getString(R.string.machine_name_not_empty));
+                    tieNewMachineName.requestFocus();
+                    Toast.makeText(mContext, getResources().getString(R.string.machine_name_not_empty), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -213,6 +216,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogNewMachine.dismiss();
+            }
+        });
+
+        tieNewMachineName.setOnClickListener(new AdapterView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tilNewMachineNameLayout.setError(null);
             }
         });
 
@@ -227,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
         dialogNewExercise.setContentView(R.layout.dialog_new_exercise);
 
         final Spinner               spNewExerciseMachine = ButterKnife.findById(dialogNewExercise, R.id.spExerciseMachine);
+        //todo change spinner to show all exercises
         ArrayAdapter<StringWithTag> spAdapter            = new ArrayAdapter<>(mContext, R.layout.spinner_item, sqLiteHelper.selectAllMachineSpinner());
 
         spAdapter           .setDropDownViewResource(R.layout.spinner_item);
@@ -301,18 +312,6 @@ public class MainActivity extends AppCompatActivity {
 
         dialogNewExercise.setCanceledOnTouchOutside(true);
         dialogNewExercise.show();
-    }
-
-    private boolean validMachine(String newMachineNumber, String newMachineName){
-        boolean isValidMachine;
-
-        if (!newMachineNumber.isEmpty()) {
-            isValidMachine = !newMachineName.isEmpty();
-        } else {
-            isValidMachine = false;
-        }
-
-        return isValidMachine;
     }
 }
 

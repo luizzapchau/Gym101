@@ -11,6 +11,8 @@
     <string name="exercise_save_success">Exercise saved with success.</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
     <string name="data_lost_leave">All data provided will be lost. Leave anyway?</string>
+    <string name="date_future">Date cannot be in the future.</string>
+    <string name="machine_name_not_empty">The machine name cannot be empty.</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>

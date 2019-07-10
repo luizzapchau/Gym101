@@ -18,9 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +40,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
     @BindView(R.id.tilNewWorkoutSetsLayout)   TextInputLayout   tilNewWorkoutSetsLayout;
     @BindView(R.id.tilNewWorkoutWeightLayout) TextInputLayout   tilNewWorkoutWeightLayout;
     @BindView(R.id.tilNewWorkoutSpeedLayout)  TextInputLayout   tilNewWorkoutSpeedLayout;
+    @BindView(R.id.tilNewWorkoutDateLayout)   TextInputLayout   tilNewWorkoutDateLayout;
     @BindView(R.id.tieNewWorkoutDate)         TextInputEditText tieNewWorkoutDate;
     @BindView(R.id.tieNewWorkoutWeight)       TextInputEditText tieNewWorkoutWeight;
     @BindView(R.id.tieNewWorkoutSpeed)        TextInputEditText tieNewWorkoutSpeed;
@@ -48,6 +53,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
     @BindView(R.id.llTimeDistance)            LinearLayout      llTimeDistance;
     @BindView(R.id.tvNewWorkoutUnit)          TextView          tvNewWorkoutUnit;
 
+    private Calendar     mCalendar;
     private Context      mContext;
     private SQLiteHelper sqLiteHelper;
     private int[]        machineId;
@@ -62,6 +68,9 @@ public class NewWorkoutActivity extends AppCompatActivity {
         mContext     = this;
         sqLiteHelper = new SQLiteHelper(this);
         machineId    = new int[1];
+        mCalendar    = new GregorianCalendar();
+
+        mCalendar.setTime(new Date());
 
         initComponents();
     }
@@ -122,17 +131,15 @@ public class NewWorkoutActivity extends AppCompatActivity {
 
     @OnClick(R.id.tieNewWorkoutDate)
     public void edtNewWorkoutDateOnClick() {
-        //todo change theme
-//        DatePickerDialog mDatePickerDialog = new DatePickerDialog(mContext, R.style.luiz_dialog);
-        DatePickerDialog mDatePickerDialog = new DatePickerDialog(mContext);
+        tilNewWorkoutDateLayout.setError(null);
 
-        mDatePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+        new DatePickerDialog(mContext, R.style.luiz_date_picker_dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                //todo set date to tie
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mCalendar.set(year, monthOfYear, dayOfMonth);
+                tieNewWorkoutDate.setText(formatDate(mCalendar.getTime()));
             }
-        });
-        mDatePickerDialog.show();
+        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @OnClick(R.id.iv_new_workout_close)
@@ -142,16 +149,12 @@ public class NewWorkoutActivity extends AppCompatActivity {
 
     @OnClick(R.id.bt_new_workout_save)
     public void btNewWorkoutSaveOnClick() {
-        if (checkFields()) {
+        if (!new Date().before(mCalendar.getTime())) {
             //todo save shit
+        } else {
+            tilNewWorkoutDateLayout.setError(getString(R.string.date_future));
+            Toast.makeText(mContext, getResources().getString(R.string.date_future), Toast.LENGTH_LONG).show();
         }
-    }
-
-    private Boolean checkFields() {
-        //todo check fields to save
-        //check date future
-        //check blank fields
-        return true;
     }
 
     private Boolean checkForDataOnFinish() {
@@ -180,9 +183,9 @@ public class NewWorkoutActivity extends AppCompatActivity {
         return canLeave[0];
     }
 
-    private String formatDate(Date mdate) {
+    private String formatDate(Date mDate) {
         SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("EEEE, MMMM dd yyyy");
 
-        return mSimpleDateFormat.format(mdate);
+        return mSimpleDateFormat.format(mDate);
     }
 }
