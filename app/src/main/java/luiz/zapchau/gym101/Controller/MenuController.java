@@ -31,7 +31,7 @@ public class MenuController {
 //
 //        if (id == R.id.mSair) {
 //            spHelper.spSetInt(activity, activity.getString(R.string.sp_user_id), 0);
-//            spHelper.spSetInt(activity, activity.getString(R.string.sp_codclisponte), 0);
+//            spHelper.spSetInt(activity, activity.getString(R.string.sp_codcli), 0);
 //            spHelper.spSetInt(activity, activity.getString(R.string.sp_clinica_id), 0);
 //            activity.startActivity(new Intent(activity, LoginActivity.class));
 //            activity.finish();
