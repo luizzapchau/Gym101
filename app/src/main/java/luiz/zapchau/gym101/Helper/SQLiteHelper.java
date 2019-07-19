@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import luiz.zapchau.gym101.Model.StringWithTag;
 
@@ -186,9 +187,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                         "FROM " + TB_MACHINE +
                         " WHERE " + MACHINE_ID + " = " + id;
 
-        Cursor mCursor = db.rawQuery(select,null);
-        mCursor.moveToFirst();
-        return cursorToJSO(mCursor);
+        return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectUser(int id) {
@@ -196,19 +195,15 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                         "FROM " + TB_USER +
                         " WHERE " + USER_ID + " = " + id;
 
-        Cursor mCursor = db.rawQuery(select,null);
-        mCursor.moveToFirst();
-        return cursorToJSO(mCursor);
+        return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectExercise(int id) {
         String select = "SELECT * " +
-                        "FROM " + TB_EXERCISE +
+                        " FROM " + TB_EXERCISE +
                         " WHERE " + EXERCISE_ID + " = " + id;
 
-        Cursor mCursor = db.rawQuery(select,null);
-        mCursor.moveToFirst();
-        return cursorToJSO(mCursor);
+        return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectWorkout(int id) {
@@ -216,9 +211,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                         "FROM " + TB_WORKOUT +
                         " WHERE " + WORKOUT_ID + " = " + id;
 
-        Cursor mCursor = db.rawQuery(select,null);
-        mCursor.moveToFirst();
-        return cursorToJSO(mCursor);
+        return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public List<StringWithTag> selectAllMachineSpinner() {
@@ -230,25 +223,24 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public List<StringWithTag> selectAllExerciseSpinner(){
-        String select = "SELECT " + TB_MACHINE + "." + EXERCISE_ID + ", " + EXERCISE_MACHINE + ", " + MACHINE_NAME +
-                        ", " + EXERCISE_DAYS + ", " + MACHINE_NUMBER +
+        String select = "SELECT " + TB_EXERCISE + "." + EXERCISE_ID + ", " + EXERCISE_MACHINE + ", " + ", " + EXERCISE_DAYS + ", " +
+                        TB_MACHINE + "." + MACHINE_NAME + TB_MACHINE + "." + MACHINE_NUMBER +
                         " FROM " + TB_EXERCISE +
                         " JOIN " + TB_MACHINE +
-                        " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID;
+                        " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID +
+                        " ORDER BY " + MACHINE_NUMBER;
 
         return cursorToList(db.rawQuery(select, null));
     }
 
     public JSONArray selectAllWorkout() {
-        String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + TB_MACHINE + "." + MACHINE_NUMBER +
-                        ", " + TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_COLOR +
-                        ", " + WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME +
-                        ", " + WORKOUT_DISTANCE +
+        String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + WORKOUT_EXERCISE + ", " +
+                        WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " + WORKOUT_DISTANCE + ", " +
+                        TB_EXERCISE + "." + EXERCISE_MACHINE + ", " + TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER + ", " +
+                        TB_MACHINE + "." + MACHINE_COLOR +
                         " FROM " + TB_WORKOUT +
-                        " JOIN " + TB_EXERCISE +
-                        " ON " + TB_WORKOUT + "." + WORKOUT_EXERCISE + " = " + TB_EXERCISE + "." + EXERCISE_ID +
-                        " JOIN " + TB_MACHINE +
-                        " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID +
+                        " JOIN " + TB_EXERCISE + " ON " + TB_WORKOUT  + "." + WORKOUT_EXERCISE + " = " + TB_EXERCISE + "." + EXERCISE_ID +
+                        " JOIN " + TB_MACHINE  + " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE  + "." + MACHINE_ID  +
                         " ORDER BY " + WORKOUT_DATE + " DESC";
 
         return cursorToJSA(db.rawQuery(select, null));
@@ -344,15 +336,23 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public void deleteAllWeightData() {
-        db.delete(TB_WEIGHT, WEIGHT_ID + " != ? ", new String[]{Integer.toString(0)});
+        db.delete(TB_WEIGHT, null, null);
     }
+
+    public void deleteAllWorkoutData() {
+        db.delete(TB_WORKOUT, null, null);
+    }
+    //
     //endregion
 
     private String getDate(){
         return new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime());
     }
 
-    private JSONObject cursorToJSO(Cursor mCursor) {
+    private JSONObject cursorToJSO(Cursor mCursor, Boolean isfFromJSA) {
+        if (!isfFromJSA)
+            mCursor.moveToFirst();
+
         int columNumbers = mCursor.getColumnCount();
         JSONObject jsonObject = new JSONObject();
 
@@ -378,7 +378,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
         mCursor.moveToFirst();
         while (!mCursor.isAfterLast()){
-            jsonArray.put(cursorToJSO(mCursor));
+            jsonArray.put(cursorToJSO(mCursor, true));
             mCursor.moveToNext();
         }
         mCursor.close();

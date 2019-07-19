@@ -108,7 +108,7 @@
             android:id="@+id/spNewMachineColor"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:popupBackground="@null" />
+            android:backgroundTint="@color/colorPrimaryText" />
 
     </LinearLayout>
 

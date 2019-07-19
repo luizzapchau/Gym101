@@ -1,18 +1,23 @@
 <resources>
     <string name="app_name">Gym 101</string>
-    <!--menu==========================================================================-->
+    <!--menu=====================================================================================-->
     <string name="action_settings">Settings</string>
     <string name="action_profile">Profile</string>
 
-    <!--messages==========================================================================-->
+    <!--messages=================================================================================-->
     <string name="machine_save_success">Machine saved with success.</string>
     <string name="all_fields_must_filled">All fields must be filled.</string>
     <string name="select_machine_days_exercise">Select a machine and days for the exercise.</string>
     <string name="exercise_save_success">Exercise saved with success.</string>
+    <string name="workout_save_success">Exercise saved with success.</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
     <string name="data_lost_leave">All data provided will be lost. Leave anyway?</string>
     <string name="date_future">Date cannot be in the future.</string>
     <string name="machine_name_not_empty">The machine name cannot be empty.</string>
+    <string name="no_exercises">No exercises saved</string>
+    <string name="no_machines">No machines saved</string>
+    <string name="no_exercise_selected">No exercise was selected.</string>
+    <string name="no_machine_selected">No machine was selected.</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>
@@ -26,7 +31,7 @@
     <string name="saturday_db">sat</string>
     <string name="sunday_db">sun</string>
 
-    <!--general==========================================================================-->
+    <!--general==================================================================================-->
     <string name="date">Date</string>
     <string name="exercise_name">Exercise name</string>
     <string name="sets">Sets</string>
@@ -65,7 +70,7 @@
     <string name="yes">Yes</string>
     <string name="yes_caps">YES</string>
     <string name="no_caps">NO</string>
+    <string name="id">_id</string>
 
 
-    <!--==========================================================================-->
 </resources>

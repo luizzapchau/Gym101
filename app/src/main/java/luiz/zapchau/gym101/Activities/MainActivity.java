@@ -25,9 +25,8 @@ import android.widget.Toast;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,16 +65,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadWorkoutList() {
-        addWorkoutToList(sqLiteHelper.selectAllWorkout());
-    }
+        ArrayList<Workout> arrayOfShows   = new ArrayList<>();
+        WorkoutAdapter     workoutAdapter = new WorkoutAdapter(this, arrayOfShows);
+        ArrayList<Workout> newShow        = Workout.fromJson(sqLiteHelper.selectAllWorkout());
 
-    private void addWorkoutToList(JSONArray workoutList){
-        ArrayList<Workout> arrayOfShows = new ArrayList<>();
-        WorkoutAdapter     adapter      = new WorkoutAdapter(this, arrayOfShows);
-        ArrayList<Workout> newShow      = Workout.fromJson(workoutList);
-
-        lvWorkouts.setAdapter(adapter);
-        adapter   .addAll(newShow);
+        lvWorkouts    .setAdapter(workoutAdapter);
+        workoutAdapter.addAll(newShow);
     }
 
     @Override
@@ -236,9 +231,13 @@ public class MainActivity extends AppCompatActivity {
 
         dialogNewExercise.setContentView(R.layout.dialog_new_exercise);
 
+        List<StringWithTag> spinnerList = sqLiteHelper.selectAllMachineSpinner();
+
+        if (spinnerList.isEmpty())
+            spinnerList.add(0, new StringWithTag(getResources().getString(R.string.no_machines), -1));
+
         final Spinner               spNewExerciseMachine = ButterKnife.findById(dialogNewExercise, R.id.spExerciseMachine);
-        //todo change spinner to show all exercises
-        ArrayAdapter<StringWithTag> spAdapter            = new ArrayAdapter<>(mContext, R.layout.spinner_item, sqLiteHelper.selectAllMachineSpinner());
+        ArrayAdapter<StringWithTag> spAdapter            = new ArrayAdapter<>(mContext, R.layout.spinner_item, spinnerList);
 
         spAdapter           .setDropDownViewResource(R.layout.spinner_item);
         spNewExerciseMachine.setAdapter(spAdapter);
@@ -294,11 +293,16 @@ public class MainActivity extends AppCompatActivity {
                 if (cbNewExerciseSaturday.isChecked())
                     exerciseDays.concat(getResources().getString(R.string.saturday_db) + "|");
 
-                if (!sqLiteHelper.insertExerciseData(machineId[0], exerciseDays)) {
-                    Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                //todo refactor to new method
+                if (machineId[0] != -1) {
+                    if (!sqLiteHelper.insertExerciseData(machineId[0], exerciseDays)) {
+                        Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(mContext, getResources().getString(R.string.exercise_save_success), Toast.LENGTH_LONG).show();
+                        dialogNewExercise.dismiss();
+                    }
                 } else {
-                    Toast.makeText(mContext, getResources().getString(R.string.exercise_save_success), Toast.LENGTH_LONG).show();
-                    dialogNewExercise.dismiss();
+                    Toast.makeText(mContext, getResources().getString(R.string.no_machine_selected), Toast.LENGTH_LONG).show();
                 }
             }
         });
