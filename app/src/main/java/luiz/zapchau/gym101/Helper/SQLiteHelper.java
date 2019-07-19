@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 import luiz.zapchau.gym101.Model.StringWithTag;
 
@@ -223,8 +222,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public List<StringWithTag> selectAllExerciseSpinner(){
-        String select = "SELECT " + TB_EXERCISE + "." + EXERCISE_ID + ", " + EXERCISE_MACHINE + ", " + ", " + EXERCISE_DAYS + ", " +
-                        TB_MACHINE + "." + MACHINE_NAME + TB_MACHINE + "." + MACHINE_NUMBER +
+        String select = "SELECT " + TB_EXERCISE + "." + EXERCISE_ID + ", " + EXERCISE_MACHINE + ", " + EXERCISE_DAYS + ", " +
+                        TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER +
                         " FROM " + TB_EXERCISE +
                         " JOIN " + TB_MACHINE +
                         " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID +
@@ -235,8 +234,9 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     public JSONArray selectAllWorkout() {
         String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + WORKOUT_EXERCISE + ", " +
-                        WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " + WORKOUT_DISTANCE + ", " +
-                        TB_EXERCISE + "." + EXERCISE_MACHINE + ", " + TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER + ", " +
+                        WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " +
+                        WORKOUT_DISTANCE + ", " + WORKOUT_EXERCISE + ", " + TB_EXERCISE + "." + EXERCISE_MACHINE + ", " +
+                        TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER + ", " +
                         TB_MACHINE + "." + MACHINE_COLOR +
                         " FROM " + TB_WORKOUT +
                         " JOIN " + TB_EXERCISE + " ON " + TB_WORKOUT  + "." + WORKOUT_EXERCISE + " = " + TB_EXERCISE + "." + EXERCISE_ID +

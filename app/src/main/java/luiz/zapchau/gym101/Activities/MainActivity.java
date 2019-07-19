@@ -317,5 +317,7 @@ public class MainActivity extends AppCompatActivity {
         dialogNewExercise.setCanceledOnTouchOutside(true);
         dialogNewExercise.show();
     }
+
+    //todo delete workout on long click
 }
 

@@ -3,85 +3,124 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingTop="8dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="8dp"
     android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="88dp"
         android:background="@color/colorPrimary"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvWorkoutDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/date"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+            android:id="@+id/tvWorkoutMachineNumber"
+            android:layout_width="88dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="99"
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvWorkoutExercise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/exercise_name"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="8dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp">
 
-        <TextView
-            android:id="@+id/tvWorkoutSets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sets"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tvWorkoutMachineName"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:text="Machine name"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="22dp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvWorkoutRepetitions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/repetitions"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tvWorkoutWeightSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tvWorkoutMachineName"
+                android:layout_marginEnd="5dp"
+                android:gravity="center_vertical"
+                android:text="00"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="22sp" />
 
-        <TextView
-            android:id="@+id/tvWorkoutWeight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/weight"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tvWorkoutUnitWeightSpeed"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tvWorkoutMachineName"
+                android:layout_toRightOf="@+id/tvWorkoutWeightSpeed"
+                android:gravity="center_vertical"
+                android:text="Km/h"
+                android:textColor="@color/colorPrimaryText" />
 
-        <TextView
-            android:id="@+id/tvWorkoutTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tvWorkoutMachineName"
+                android:layout_toRightOf="@+id/tvWorkoutUnitWeightSpeed"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingStart="10dp">
 
-        <TextView
-            android:id="@+id/tvWorkoutDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/distance"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tvWorkoutSetsTime"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:text="00"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tvWorkoutX"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="10dp"
+                    android:gravity="center_vertical"
+                    android:text="X"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvWorkoutRepetitionsDistance"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|start"
+                    android:text="00"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvWorkoutId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="id"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvWorkoutExerciseId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="id"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvWorkoutMachineId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="id"

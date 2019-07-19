@@ -170,6 +170,8 @@ public class NewWorkoutActivity extends AppCompatActivity {
 
                 Toast.makeText(mContext, getResources().getString(R.string.workout_save_success), Toast.LENGTH_LONG).show();
 
+                //todo fix weight = -1
+
                 super.onBackPressed();
             } else {
                 Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();

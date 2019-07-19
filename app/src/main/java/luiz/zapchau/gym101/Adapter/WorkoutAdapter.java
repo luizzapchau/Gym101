@@ -25,24 +25,46 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_workouts, parent, false);
 
-        TextView tvWorkoutId          = convertView.findViewById(R.id.tvWorkoutId);
-        TextView tvWorkoutDate        = convertView.findViewById(R.id.tvWorkoutDate);
-        TextView tvWorkoutExercise    = convertView.findViewById(R.id.tvWorkoutExercise);
-        TextView tvWorkoutSets        = convertView.findViewById(R.id.tvWorkoutSets);
-        TextView tvWorkoutRepetitions = convertView.findViewById(R.id.tvWorkoutRepetitions);
-        TextView tvWorkoutWeight      = convertView.findViewById(R.id.tvWorkoutWeight);
-        TextView tvWorkoutTime        = convertView.findViewById(R.id.tvWorkoutTime);
-        TextView tvWorkoutDistance    = convertView.findViewById(R.id.tvWorkoutDistance);
+        TextView tvWorkoutId           = convertView.findViewById(R.id.tvWorkoutId);
+        TextView tvExerciseId          = convertView.findViewById(R.id.tvWorkoutExerciseId);
+        TextView tvMachineId           = convertView.findViewById(R.id.tvWorkoutMachineId);
+        TextView tvWorkoutSetsTime     = convertView.findViewById(R.id.tvWorkoutSetsTime);
+        TextView tvRepetitionsDistance = convertView.findViewById(R.id.tvWorkoutRepetitionsDistance);
+        TextView tvWeightSpeed         = convertView.findViewById(R.id.tvWorkoutWeightSpeed);
+        TextView tvMachineName         = convertView.findViewById(R.id.tvWorkoutMachineName);
+        TextView tvMachineNumber       = convertView.findViewById(R.id.tvWorkoutMachineNumber);
+        TextView tvUnit                = convertView.findViewById(R.id.tvWorkoutUnitWeightSpeed);
 
         assert workout != null;
-        tvWorkoutId         .setText(workout.id);
-        tvWorkoutDate       .setText(workout.date);
-        tvWorkoutExercise   .setText(workout.exercise);
-        tvWorkoutSets       .setText(workout.sets);
-        tvWorkoutRepetitions.setText(workout.repetitions);
-        tvWorkoutWeight     .setText(workout.weight);
-        tvWorkoutTime       .setText(workout.time);
-        tvWorkoutDistance   .setText(workout.distance);
+        tvWorkoutId      .setText(workout.id);
+        tvExerciseId     .setText(workout.exerciseId);
+        tvMachineId      .setText(workout.machineId);
+        tvMachineName    .setText(workout.machineName);
+        tvMachineNumber  .setText(workout.machineNumber);
+        tvWeightSpeed    .setText(workout.weight);
+
+        if (Integer.parseInt(workout.sets) != -1) {
+            tvWorkoutSetsTime    .setText(workout.sets);
+            tvRepetitionsDistance.setText(workout.repetitions);
+            tvUnit               .setText(getContext().getString(R.string.kg));
+        } else {
+            tvWorkoutSetsTime    .setText(workout.time);
+            tvRepetitionsDistance.setText(workout.distance + getContext().getString(R.string.km));
+            tvUnit               .setText(getContext().getString(R.string.km_h));
+        }
+
+        if (workout.machineColor.equals(getContext().getString(R.string.blue).toLowerCase())) {
+            tvMachineNumber.setBackgroundColor(getContext().getColor(R.color.colorBlue));
+
+        } else if (workout.machineColor.equals(getContext().getString(R.string.green).toLowerCase())) {
+            tvMachineNumber.setBackgroundColor(getContext().getColor(R.color.colorGreen));
+
+        } else if (workout.machineColor.equals(getContext().getString(R.string.orange).toLowerCase())) {
+            tvMachineNumber.setBackgroundColor(getContext().getColor(R.color.colorOrange));
+
+        } else if (workout.machineColor.equals(getContext().getString(R.string.red).toLowerCase())) {
+            tvMachineNumber.setBackgroundColor(getContext().getColor(R.color.colorRed));
+        }
 
         return convertView;
     }

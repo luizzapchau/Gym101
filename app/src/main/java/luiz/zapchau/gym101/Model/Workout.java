@@ -6,26 +6,36 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import luiz.zapchau.gym101.R;
+
 public class Workout {
     public String id;
     public String date;
-    public String exercise;
     public String sets;
     public String repetitions;
     public String weight;
     public String time;
     public String distance;
+    public String exerciseId;
+    public String machineId;
+    public String machineName;
+    public String machineNumber;
+    public String machineColor;
 
     private Workout(JSONObject object) {
         try {
-            this.id          = object.getString("_id");
-            this.date        = object.getString("workoutdate");
-            this.exercise    = object.getString("workoutexercise");
-            this.sets        = object.getString("workoutsets");
-            this.repetitions = object.getString("workoutrepetitions");
-            this.weight      = object.getString("workoutweight");
-            this.time        = object.getString("workouttime");
-            this.distance    = object.getString("workoutdistance");
+            this.id            = object.getString("_id");
+            this.date          = object.getString("workoutdate");
+            this.sets          = object.getString("workoutsets");
+            this.repetitions   = object.getString("workoutrepetitions");
+            this.weight        = object.getString("workoutweight");
+            this.time          = object.getString("workouttime");
+            this.distance      = object.getString("workoutdistance");
+            this.exerciseId    = object.getString("workoutexercise");
+            this.machineId     = object.getString("exercisemachine");
+            this.machineName   = object.getString("machinename");
+            this.machineNumber = object.getString("machinenumber");
+            this.machineColor  = object.getString("machinecolor");
 
         } catch (JSONException e) {
             e.printStackTrace();
