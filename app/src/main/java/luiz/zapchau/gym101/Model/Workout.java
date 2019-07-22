@@ -6,8 +6,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import luiz.zapchau.gym101.R;
-
 public class Workout {
     public String id;
     public String date;
@@ -16,6 +14,7 @@ public class Workout {
     public String weight;
     public String time;
     public String distance;
+    public String speed;
     public String exerciseId;
     public String machineId;
     public String machineName;
@@ -31,6 +30,7 @@ public class Workout {
             this.weight        = object.getString("workoutweight");
             this.time          = object.getString("workouttime");
             this.distance      = object.getString("workoutdistance");
+            this.speed         = object.getString("workoutspeed");
             this.exerciseId    = object.getString("workoutexercise");
             this.machineId     = object.getString("exercisemachine");
             this.machineName   = object.getString("machinename");

@@ -47,6 +47,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     private static final String WORKOUT_WEIGHT      = "workoutweight";
     private static final String WORKOUT_TIME        = "workouttime";
     private static final String WORKOUT_DISTANCE    = "workoutdistance";
+    private static final String WORKOUT_SPEED       = "workoutspeed";
 
     private static final String TB_WEIGHT    = "weight";
     private static final String WEIGHT_ID    = "_id";
@@ -64,42 +65,43 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db){
         String createTableMachine   = "CREATE TABLE " + TB_MACHINE + "(" +
-                                      MACHINE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                      MACHINE_NUMBER + " INTEGER, " +
-                                      MACHINE_NAME + " TEXT NOT NULL, " +
-                                      MACHINE_COLOR + " TEXT NOT NULL); ";
+                                      MACHINE_ID      + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                      MACHINE_NUMBER  + " INTEGER, " +
+                                      MACHINE_NAME    + " TEXT NOT NULL, " +
+                                      MACHINE_COLOR   + " TEXT NOT NULL); ";
 
         String createTableUser      = "CREATE TABLE " + TB_USER + "(" +
-                                      USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                      USER_NAME + " TEXT NOT NULL, " +
-                                      USER_AGE + " INTEGER, " +
-                                      USER_HEIGHT + " REAL, " +
-                                      USER_WEIGHT + " REAL NOT NULL, " +
+                                      USER_ID         + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                      USER_NAME       + " TEXT NOT NULL, " +
+                                      USER_AGE        + " INTEGER, " +
+                                      USER_HEIGHT     + " REAL, " +
+                                      USER_WEIGHT     + " REAL NOT NULL, " +
                                       USER_TIMES_WEEK + " INTEGER);";
 
-        String createTableExercise = "CREATE TABLE " + TB_EXERCISE + "(" +
-                                      EXERCISE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        String createTableExercise = "CREATE TABLE "   + TB_EXERCISE + "(" +
+                                      EXERCISE_ID      + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                       EXERCISE_MACHINE + " INTEGER NOT NULL, " +
-                                      EXERCISE_DAYS + " TEXT, " +
+                                      EXERCISE_DAYS    + " TEXT, " +
                                       "FOREIGN KEY( " + EXERCISE_MACHINE + ") " +
                                       "REFERENCES " + TB_MACHINE + "(" + MACHINE_ID + "));";
 
-        String createTableWorkout  = "CREATE TABLE " + TB_WORKOUT + "(" +
-                                     WORKOUT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                     WORKOUT_DATE + " TEXT NOT NULL, " +
-                                     WORKOUT_EXERCISE + " INTEGER, " +
-                                     WORKOUT_SETS + " INTEGER, " +
+        String createTableWorkout  = "CREATE TABLE "     + TB_WORKOUT + "(" +
+                                     WORKOUT_ID          + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                     WORKOUT_DATE        + " TEXT NOT NULL, " +
+                                     WORKOUT_EXERCISE    + " INTEGER, " +
+                                     WORKOUT_SETS        + " INTEGER, " +
                                      WORKOUT_REPETITIONS + " INTEGER, " +
-                                     WORKOUT_WEIGHT + " REAL, " +
-                                     WORKOUT_TIME + " TEXT, " +
-                                     WORKOUT_DISTANCE + " REAL, " +
+                                     WORKOUT_WEIGHT      + " REAL, " +
+                                     WORKOUT_TIME        + " TEXT, " +
+                                     WORKOUT_DISTANCE    + " REAL, " +
+                                     WORKOUT_SPEED       + " REAL, " +
                                      "FOREIGN KEY (" + WORKOUT_EXERCISE + ") " +
                                      "REFERENCES " + TB_EXERCISE + "(" + EXERCISE_ID + "));";
 
         String createTableWeight   = "CREATE TABLE " + TB_WEIGHT + "(" +
-                                     WEIGHT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                     WEIGHT_DATE + " TEXT NOT NULL, " +
-                                     WEIGHT_VALUE + " REAL NOT NULL);";
+                                     WEIGHT_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                     WEIGHT_DATE     + " TEXT NOT NULL, " +
+                                     WEIGHT_VALUE    + " REAL NOT NULL);";
 
         db.execSQL(createTableMachine);
         db.execSQL(createTableUser);
@@ -151,21 +153,22 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(EXERCISE_MACHINE, machine);
-        contentValues.put(EXERCISE_DAYS, days);
+        contentValues.put(EXERCISE_DAYS   , days);
 
         return db.insert(TB_EXERCISE, null, contentValues) != -1;
     }
 
-    public boolean insertWorkoutData(String date, int exercise, int sets, int repetitions, float weight, String time, float distance) {
+    public boolean insertWorkoutData(String date, int exercise, int sets, int repetitions, float weight, String time, float distance, float speed) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(WORKOUT_DATE, date);
-        contentValues.put(WORKOUT_EXERCISE, exercise);
-        contentValues.put(WORKOUT_SETS, sets);
+        contentValues.put(WORKOUT_DATE       , date);
+        contentValues.put(WORKOUT_EXERCISE   , exercise);
+        contentValues.put(WORKOUT_SETS       , sets);
         contentValues.put(WORKOUT_REPETITIONS, repetitions);
-        contentValues.put(WORKOUT_WEIGHT, weight);
-        contentValues.put(WORKOUT_TIME, time);
-        contentValues.put(WORKOUT_DISTANCE, distance);
+        contentValues.put(WORKOUT_WEIGHT     , weight);
+        contentValues.put(WORKOUT_TIME       , time);
+        contentValues.put(WORKOUT_DISTANCE   , distance);
+        contentValues.put(WORKOUT_SPEED      , speed);
 
         return db.insert(TB_WORKOUT, null, contentValues) != -1;
     }
@@ -173,7 +176,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     public boolean insertWeightData(String date, float value) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(WEIGHT_DATE, date);
+        contentValues.put(WEIGHT_DATE , date);
         contentValues.put(WEIGHT_VALUE, value);
 
         return db.insert(TB_WEIGHT, null, contentValues) != -1;
@@ -235,7 +238,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     public JSONArray selectAllWorkout() {
         String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + WORKOUT_EXERCISE + ", " +
                         WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " +
-                        WORKOUT_DISTANCE + ", " + WORKOUT_EXERCISE + ", " + TB_EXERCISE + "." + EXERCISE_MACHINE + ", " +
+                        WORKOUT_DISTANCE + ", " + WORKOUT_SPEED + ", " + TB_EXERCISE + "." + EXERCISE_MACHINE + ", " +
                         TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER + ", " +
                         TB_MACHINE + "." + MACHINE_COLOR +
                         " FROM " + TB_WORKOUT +
@@ -259,10 +262,10 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     public boolean updateUser(int id, String name, int age, float height, float weight, int timesWeek){
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(USER_NAME, name);
-        contentValues.put(USER_AGE, age);
-        contentValues.put(USER_HEIGHT, height);
-        contentValues.put(USER_WEIGHT, weight);
+        contentValues.put(USER_NAME      , name);
+        contentValues.put(USER_AGE       , age);
+        contentValues.put(USER_HEIGHT    , height);
+        contentValues.put(USER_WEIGHT    , weight);
         contentValues.put(USER_TIMES_WEEK, timesWeek);
 
         if (db.update(TB_USER, contentValues,USER_ID + " = ? ", new String[]{Integer.toString(id)}) == -1)
@@ -277,8 +280,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(MACHINE_NUMBER, number);
-        contentValues.put(MACHINE_NAME, name);
-        contentValues.put(MACHINE_COLOR, color);
+        contentValues.put(MACHINE_NAME  , name);
+        contentValues.put(MACHINE_COLOR , color);
 
         return db.update(TB_MACHINE, contentValues, MACHINE_ID + " = ? ", new String[]{Integer.toString(id)}) != -1;
     }
@@ -287,7 +290,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(EXERCISE_MACHINE, machine);
-        contentValues.put(EXERCISE_DAYS, days);
+        contentValues.put(EXERCISE_DAYS   , days);
 
         if (db.update(TB_EXERCISE, contentValues,EXERCISE_ID + " = ? ", new String[]{Integer.toString(id)}) == -1)
             return false;
@@ -295,16 +298,17 @@ public class SQLiteHelper extends SQLiteOpenHelper{
             return true;
     }
 
-    public boolean updateWorkout(int id, String date, int exercise, int sets, int repetitions, float weight, String time, float distance){
+    public boolean updateWorkout(int id, String date, int exercise, int sets, int repetitions, float weight, String time, float distance, float speed){
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(WORKOUT_DATE, date);
-        contentValues.put(WORKOUT_EXERCISE, exercise);
-        contentValues.put(WORKOUT_SETS, sets);
+        contentValues.put(WORKOUT_DATE       , date);
+        contentValues.put(WORKOUT_EXERCISE   , exercise);
+        contentValues.put(WORKOUT_SETS       , sets);
         contentValues.put(WORKOUT_REPETITIONS, repetitions);
-        contentValues.put(WORKOUT_WEIGHT, weight);
-        contentValues.put(WORKOUT_TIME, time);
-        contentValues.put(WORKOUT_DISTANCE, distance);
+        contentValues.put(WORKOUT_WEIGHT     , weight);
+        contentValues.put(WORKOUT_TIME       , time);
+        contentValues.put(WORKOUT_DISTANCE   , distance);
+        contentValues.put(WORKOUT_SPEED      , speed);
 
         return db.update(TB_WORKOUT, contentValues, WORKOUT_ID + " = ? ", new String[]{Integer.toString(id)}) != -1;
     }
@@ -312,11 +316,11 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     //region delete
     public void wipeDB() {
-        db.delete(TB_MACHINE, null, null);
-        db.delete(TB_USER, null, null);
+        db.delete(TB_MACHINE , null, null);
+        db.delete(TB_USER    , null, null);
         db.delete(TB_EXERCISE, null, null);
-        db.delete(TB_WORKOUT, null, null);
-        db.delete(TB_WEIGHT, null, null);
+        db.delete(TB_WORKOUT , null, null);
+        db.delete(TB_WEIGHT  , null, null);
     }
 
     public void deleteMachineEntry(int id){
@@ -406,6 +410,20 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public void temp(){
-        db.execSQL("drop table workout");
+        String createTableWorkout  = "CREATE TABLE "     + TB_WORKOUT + "(" +
+                WORKOUT_ID          + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                WORKOUT_DATE        + " TEXT NOT NULL, " +
+                WORKOUT_EXERCISE    + " INTEGER, " +
+                WORKOUT_SETS        + " INTEGER, " +
+                WORKOUT_REPETITIONS + " INTEGER, " +
+                WORKOUT_WEIGHT      + " REAL, " +
+                WORKOUT_TIME        + " TEXT, " +
+                WORKOUT_DISTANCE    + " REAL, " +
+                WORKOUT_SPEED       + " REAL, " +
+                "FOREIGN KEY (" + WORKOUT_EXERCISE + ") " +
+                "REFERENCES " + TB_EXERCISE + "(" + EXERCISE_ID + "));";
+
+        db.execSQL(createTableWorkout);
+
     }
 }

@@ -166,11 +166,10 @@ public class NewWorkoutActivity extends AppCompatActivity {
                     tieNewWorkoutRepetitions        .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutRepetitions.getText().toString()),
                     tieNewWorkoutWeight             .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutWeight     .getText().toString()),
                     tieNewWorkoutTime               .getText().toString().isEmpty() ? "0" :                    tieNewWorkoutTime       .getText().toString(),
-                    tieNewWorkoutDistance           .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutDistance   .getText().toString()))) {
+                    tieNewWorkoutDistance           .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutDistance   .getText().toString()),
+                    tieNewWorkoutSpeed              .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutSpeed      .getText().toString()))) {
 
                 Toast.makeText(mContext, getResources().getString(R.string.workout_save_success), Toast.LENGTH_LONG).show();
-
-                //todo fix weight = -1
 
                 super.onBackPressed();
             } else {

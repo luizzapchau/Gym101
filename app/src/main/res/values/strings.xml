@@ -9,7 +9,8 @@
     <string name="all_fields_must_filled">All fields must be filled.</string>
     <string name="select_machine_days_exercise">Select a machine and days for the exercise.</string>
     <string name="exercise_save_success">Exercise saved with success.</string>
-    <string name="workout_save_success">Exercise saved with success.</string>
+    <string name="workout_save_success">Workout saved with success.</string>
+    <string name="workout_deleted">Workout entry deleted.</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
     <string name="data_lost_leave">All data provided will be lost. Leave anyway?</string>
     <string name="date_future">Date cannot be in the future.</string>
@@ -18,6 +19,7 @@
     <string name="no_machines">No machines saved</string>
     <string name="no_exercise_selected">No exercise was selected.</string>
     <string name="no_machine_selected">No machine was selected.</string>
+    <string name="delete_confirmation">Delete workout entry?</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>

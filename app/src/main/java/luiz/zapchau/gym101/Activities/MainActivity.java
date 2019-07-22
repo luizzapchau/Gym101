@@ -2,12 +2,14 @@ package luiz.zapchau.gym101.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -39,8 +42,8 @@ import luiz.zapchau.gym101.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.lvWorkouts) ListView      lvWorkouts;
-    @BindView(R.id.btNew)      SpeedDialView speedDialView;
+    @BindView(R.id.lvWorkouts)  ListView      lvWorkouts;
+    @BindView(R.id.btNew)       SpeedDialView speedDialView;
 
     private SQLiteHelper sqLiteHelper;
     private Context      mContext;
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
 
         initSpeedDial(savedInstanceState == null);
+
+        onLvWorkoutsLongClick();
     }
 
     @Override
@@ -318,6 +323,37 @@ public class MainActivity extends AppCompatActivity {
         dialogNewExercise.show();
     }
 
-    //todo delete workout on long click
+    private void onLvWorkoutsLongClick(){
+        lvWorkouts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final TextView tvWorkoutId = ButterKnife.findById(view, R.id.tvWorkoutId);
+
+                final int workoutId = Integer.parseInt(tvWorkoutId.getText().toString());
+
+                new AlertDialog.Builder(mContext, R.style.luiz_dialog)
+                        .setMessage(R.string.delete_confirmation)
+                        .setPositiveButton(R.string.yes_caps, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                sqLiteHelper.deleteWorkoutEntry(workoutId);
+
+                                Toast.makeText(mContext, getResources().getString(R.string.workout_deleted), Toast.LENGTH_LONG).show();
+
+                                onResume();
+                            }
+                        })
+                        .setNegativeButton(R.string.no_caps, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //blank
+                            }
+                        })
+                        .show();
+
+                return true;
+            }
+        });
+    }
 }
 
