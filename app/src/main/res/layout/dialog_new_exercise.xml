@@ -69,127 +69,73 @@
         android:padding="8dp">
 
         <CheckBox
-            android:id="@+id/cbNewExerciseSunday"
+            android:id="@+id/cbNewExerciseA"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:foregroundTint="@color/colorAccent" />
 
         <CheckBox
-            android:id="@+id/cbNewExerciseMonday"
+            android:id="@+id/cbNewExerciseB"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_toRightOf="@id/cbNewExerciseSunday"
+            android:layout_toRightOf="@id/cbNewExerciseA"
             android:foregroundTint="@color/colorAccent" />
 
         <CheckBox
-            android:id="@+id/cbNewExerciseTuesday"
+            android:id="@+id/cbNewExerciseC"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_toRightOf="@id/cbNewExerciseMonday"
+            android:layout_toRightOf="@id/cbNewExerciseB"
             android:foregroundTint="@color/colorAccent" />
 
         <CheckBox
-            android:id="@+id/cbNewExerciseWednesday"
+            android:id="@+id/cbNewExerciseD"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_toRightOf="@id/cbNewExerciseTuesday"
-            android:foregroundTint="@color/colorAccent" />
-
-        <CheckBox
-            android:id="@+id/cbNewExerciseThursday"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/cbNewExerciseWednesday"
-            android:foregroundTint="@color/colorAccent" />
-
-        <CheckBox
-            android:id="@+id/cbNewExerciseFriday"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/cbNewExerciseThursday"
-            android:foregroundTint="@color/colorAccent" />
-
-        <CheckBox
-            android:id="@+id/cbNewExerciseSaturday"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/cbNewExerciseFriday"
+            android:layout_toRightOf="@id/cbNewExerciseC"
             android:foregroundTint="@color/colorAccent" />
 
         <TextView
-            android:id="@+id/tvNewExerciseSunday"
+            android:id="@+id/tvNewExerciseA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseSunday"
-            android:layout_alignStart="@id/cbNewExerciseSunday"
+            android:layout_below="@id/cbNewExerciseA"
+            android:layout_alignStart="@id/cbNewExerciseA"
             android:layout_marginHorizontal="11dp"
-            android:text="@string/sunday_abv"
+            android:text="@string/a_caps"
             android:textColor="@color/colorPrimaryText"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tvNewExerciseMonday"
+            android:id="@+id/tvNewExerciseB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseMonday"
+            android:layout_below="@id/cbNewExerciseB"
             android:layout_marginHorizontal="11dp"
-            android:layout_toRightOf="@id/tvNewExerciseSunday"
-            android:text="@string/monday_abv"
+            android:layout_toRightOf="@id/tvNewExerciseA"
+            android:text="@string/b_caps"
             android:textColor="@color/colorPrimaryText"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tvNewExerciseTuesday"
+            android:id="@+id/tvNewExerciseC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseTuesday"
+            android:layout_below="@id/cbNewExerciseC"
             android:layout_marginHorizontal="11dp"
-            android:layout_toRightOf="@id/tvNewExerciseMonday"
-            android:text="@string/tuesday_abv"
+            android:layout_toRightOf="@id/tvNewExerciseB"
+            android:text="@string/c_caps"
             android:textColor="@color/colorPrimaryText"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tvNewExerciseWednesday"
+            android:id="@+id/tvNewExerciseD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseWednesday"
+            android:layout_below="@id/cbNewExerciseD"
             android:layout_marginHorizontal="11dp"
-            android:layout_toRightOf="@id/tvNewExerciseTuesday"
-            android:text="@string/wednesday_abv"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvNewExerciseThursday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseThursday"
-            android:layout_marginHorizontal="11dp"
-            android:layout_toRightOf="@id/tvNewExerciseWednesday"
-            android:text="@string/thursday_abv"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvNewExerciseFriday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseFriday"
-            android:layout_marginHorizontal="11dp"
-            android:layout_toRightOf="@id/tvNewExerciseThursday"
-            android:text="@string/friday_abv"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvNewExerciseSaturday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cbNewExerciseSaturday"
-            android:layout_marginHorizontal="11dp"
-            android:layout_toRightOf="@id/tvNewExerciseFriday"
-            android:text="@string/saturday_abv"
+            android:layout_toRightOf="@id/tvNewExerciseC"
+            android:text="@string/d_caps"
             android:textColor="@color/colorPrimaryText"
             android:textSize="14sp" />
 

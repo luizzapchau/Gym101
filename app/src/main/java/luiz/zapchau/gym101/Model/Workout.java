@@ -16,6 +16,7 @@ public class Workout {
     public String distance;
     public String speed;
     public String exerciseId;
+    public String exerciseDays;
     public String machineId;
     public String machineName;
     public String machineNumber;
@@ -32,6 +33,7 @@ public class Workout {
             this.distance      = object.getString("workoutdistance");
             this.speed         = object.getString("workoutspeed");
             this.exerciseId    = object.getString("workoutexercise");
+            this.exerciseDays  = object.getString("exercisedays");
             this.machineId     = object.getString("exercisemachine");
             this.machineName   = object.getString("machinename");
             this.machineNumber = object.getString("machinenumber");

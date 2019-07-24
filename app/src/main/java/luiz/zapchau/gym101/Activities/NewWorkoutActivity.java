@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,6 +77,8 @@ public class NewWorkoutActivity extends AppCompatActivity {
 
         initComponents();
     }
+
+    //TODO change spinner for list on exercises
 
     @Override
     public void onBackPressed() {
@@ -168,7 +171,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
                     exerciseId[0],
                     tieNewWorkoutSets               .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutSets       .getText().toString()),
                     tieNewWorkoutRepetitions        .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutRepetitions.getText().toString()),
-                    tieNewWorkoutWeight             .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutWeight     .getText().toString()),
+                    tieNewWorkoutWeight             .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutWeight.getText().toString()),
                     tieNewWorkoutTime               .getText().toString().isEmpty() ? "0" :                    tieNewWorkoutTime       .getText().toString(),
                     tieNewWorkoutDistance           .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutDistance   .getText().toString()),
                     tieNewWorkoutSpeed              .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutSpeed      .getText().toString()))) {

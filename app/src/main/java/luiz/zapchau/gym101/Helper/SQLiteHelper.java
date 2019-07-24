@@ -208,6 +208,15 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         return cursorToJSO(db.rawQuery(select,null), false);
     }
 
+    public JSONObject selectExerciseByMachineDays(int machineId, String days) {
+        String select = "SELECT * " +
+                        " FROM " + TB_EXERCISE +
+                        " WHERE " + EXERCISE_MACHINE + " = " + machineId +
+                        " AND " + EXERCISE_DAYS + " = \"" + days +"\"";
+
+        return cursorToJSO(db.rawQuery(select,null), false);
+    }
+
     public JSONObject selectWorkout(int id) {
         String select = "SELECT * " +
                         "FROM " + TB_WORKOUT +
@@ -239,8 +248,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + WORKOUT_EXERCISE + ", " +
                         WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " +
                         WORKOUT_DISTANCE + ", " + WORKOUT_SPEED + ", " + TB_EXERCISE + "." + EXERCISE_MACHINE + ", " +
-                        TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER + ", " +
-                        TB_MACHINE + "." + MACHINE_COLOR +
+                        TB_EXERCISE + "." + EXERCISE_DAYS + ", " + TB_MACHINE + "." + MACHINE_NAME + ", " +
+                        TB_MACHINE + "." + MACHINE_NUMBER + ", " + TB_MACHINE + "." + MACHINE_COLOR +
                         " FROM " + TB_WORKOUT +
                         " JOIN " + TB_EXERCISE + " ON " + TB_WORKOUT  + "." + WORKOUT_EXERCISE + " = " + TB_EXERCISE + "." + EXERCISE_ID +
                         " JOIN " + TB_MACHINE  + " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE  + "." + MACHINE_ID  +
@@ -357,11 +366,11 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         if (!isfFromJSA)
             mCursor.moveToFirst();
 
-        int columNumbers = mCursor.getColumnCount();
+        int columnNumbers = mCursor.getColumnCount();
         JSONObject jsonObject = new JSONObject();
 
-        for (int i = 0; i < columNumbers; i++){
-            if (mCursor.getColumnName(i) != null){
+        for (int i = 0; i < columnNumbers; i++){
+            if (mCursor.getColumnName(i) != null && mCursor.getCount() > 0){
                 try{
                     if (mCursor.getString(i) != null){
                         jsonObject.put(mCursor.getColumnName(i), mCursor.getString(i));
@@ -399,8 +408,12 @@ public class SQLiteHelper extends SQLiteOpenHelper{
             for (int i = 0; i < mArray.length(); i++) {
                 JSONObject mObject = mArray.getJSONObject(i);
 
-                mList.add(new StringWithTag(mObject.getInt(MACHINE_NUMBER) + " - " + mObject.getString(MACHINE_NAME),
-                        mObject.getInt(MACHINE_ID)));
+                if (mObject.getInt(MACHINE_NUMBER) != -1) {
+                    mList.add(new StringWithTag(mObject.getInt(MACHINE_NUMBER) + " - " + mObject.getString(MACHINE_NAME),
+                            mObject.getInt(MACHINE_ID)));
+                } else {
+                    mList.add(new StringWithTag(mObject.getString(MACHINE_NAME), mObject.getInt(MACHINE_ID)));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

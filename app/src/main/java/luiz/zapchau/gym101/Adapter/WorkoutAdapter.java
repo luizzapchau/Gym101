@@ -36,10 +36,14 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         TextView     tvWorkoutSetsTime     = convertView.findViewById(R.id.tvWorkoutSetsTime);
         TextView     tvRepetitionsDistance = convertView.findViewById(R.id.tvWorkoutRepetitionsDistance);
         TextView     tvWeightSpeed         = convertView.findViewById(R.id.tvWorkoutWeightSpeed);
-        TextView     tvMachineName         = convertView.findViewById(R.id.tvWorkoutMachineName);
-        TextView     tvMachineNumber       = convertView.findViewById(R.id.tvWorkoutMachineNumber);
+        TextView     tvMachineName         = convertView.findViewById(R.id.tvExerciseMachineName);
+        TextView     tvMachineNumber       = convertView.findViewById(R.id.tvExerciseMachineNumber);
         TextView     tvUnit                = convertView.findViewById(R.id.tvWorkoutUnitWeightSpeed);
         TextView     tvDate                = convertView.findViewById(R.id.tvWorkoutDate);
+        TextView     tvDayA                = convertView.findViewById(R.id.tvWorkoutDayA);
+        TextView     tvDayB                = convertView.findViewById(R.id.tvWorkoutDayB);
+        TextView     tvDayC                = convertView.findViewById(R.id.tvWorkoutDayC);
+        TextView     tvDayD                = convertView.findViewById(R.id.tvWorkoutDayD);
         LinearLayout llDate                = convertView.findViewById(R.id.llDate);
         String       lastDate              = sharedPreferencesHelper.spGetString(getContext(), getContext().getString(R.string.sp_default_date), getContext().getResources().getString(R.string.default_date));
 
@@ -48,8 +52,13 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         tvExerciseId     .setText(workout.exerciseId);
         tvMachineId      .setText(workout.machineId);
         tvMachineName    .setText(workout.machineName);
-        tvMachineNumber  .setText(workout.machineNumber);
         tvWeightSpeed    .setText(workout.weight);
+
+        if (Integer.parseInt(workout.machineNumber) != -1) {
+            tvMachineNumber.setText(workout.machineNumber);
+        } else {
+            tvMachineNumber.setText(null);
+        }
 
         if (workout.date.equals(formatDate(new Date())))
             workout.date = getContext().getResources().getString(R.string.today);
@@ -85,6 +94,30 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
 
         } else if (workout.machineColor.equals(getContext().getString(R.string.red).toLowerCase())) {
             tvMachineNumber.setBackgroundColor(getContext().getColor(R.color.colorRed));
+        }
+
+        if (workout.exerciseDays.contains(getContext().getResources().getString(R.string.a_db))){
+            tvDayA.setVisibility(View.VISIBLE);
+        } else {
+            tvDayA.setVisibility(View.GONE);
+        }
+
+        if (workout.exerciseDays.contains(getContext().getResources().getString(R.string.b_db))){
+            tvDayB.setVisibility(View.VISIBLE);
+        } else {
+            tvDayB.setVisibility(View.GONE);
+        }
+
+        if (workout.exerciseDays.contains(getContext().getResources().getString(R.string.c_db))){
+            tvDayC.setVisibility(View.VISIBLE);
+        } else {
+            tvDayC.setVisibility(View.GONE);
+        }
+
+        if (workout.exerciseDays.contains(getContext().getResources().getString(R.string.d_db))){
+            tvDayD.setVisibility(View.VISIBLE);
+        } else {
+            tvDayD.setVisibility(View.GONE);
         }
 
         return convertView;

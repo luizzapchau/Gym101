@@ -20,6 +20,7 @@
     <string name="no_exercise_selected">No exercise was selected.</string>
     <string name="no_machine_selected">No machine was selected.</string>
     <string name="delete_confirmation">Delete workout entry?</string>
+    <string name="exercise_exists">Exercise already exists.</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>
@@ -32,6 +33,10 @@
     <string name="friday_db">fri</string>
     <string name="saturday_db">sat</string>
     <string name="sunday_db">sun</string>
+    <string name="a_db">a</string>
+    <string name="b_db">b</string>
+    <string name="c_db">c</string>
+    <string name="d_db">d</string>
 
     <!--SP=======================================================================================-->
     <string name="sp_name">sp_gym101</string>
@@ -80,6 +85,10 @@
     <string name="id">_id</string>
     <string name="default_date">Monday, Jan 01 1990</string>
     <string name="today">Today</string>
+    <string name="a_caps">A</string>
+    <string name="b_caps">B</string>
+    <string name="c_caps">C</string>
+    <string name="d_caps">D</string>
 
 
 </resources>

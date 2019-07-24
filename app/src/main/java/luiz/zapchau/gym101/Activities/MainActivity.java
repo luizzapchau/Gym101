@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!tieNewMachineName.getText().toString().isEmpty()) {
-                    sqLiteHelper.insertMachineData(Integer.parseInt(tieNewMachineNumber.getText().toString()),
+                    sqLiteHelper.insertMachineData(Integer.parseInt(!tieNewMachineNumber.getText().toString().isEmpty() ? tieNewMachineNumber.getText().toString() : "-1"),
                             tieNewMachineName.getText().toString(), spNewMachineColor.getSelectedItem().toString().toLowerCase());
 
                     Toast.makeText(mContext, getResources().getString(R.string.machine_save_success), Toast.LENGTH_LONG).show();
@@ -266,55 +266,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //todo add exercise letter A B C D
-
         Button btNewExerciseSave   = ButterKnife.findById(dialogNewExercise, R.id.btDialogNewExerciseSave);
         Button btNewExerciseCancel = ButterKnife.findById(dialogNewExercise, R.id.btDialogNewExerciseCancel);
 
-        final CheckBox cbNewExerciseSunday    = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseSunday);
-        final CheckBox cbNewExerciseMonday    = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseMonday);
-        final CheckBox cbNewExerciseTuesday   = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseTuesday);
-        final CheckBox cbNewExerciseWednesday = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseWednesday);
-        final CheckBox cbNewExerciseThursday  = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseThursday);
-        final CheckBox cbNewExerciseFriday    = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseFriday);
-        final CheckBox cbNewExerciseSaturday  = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseSaturday);
+        final CheckBox cbNewExerciseA = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseA);
+        final CheckBox cbNewExerciseB = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseB);
+        final CheckBox cbNewExerciseC = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseC);
+        final CheckBox cbNewExerciseD = ButterKnife.findById(dialogNewExercise, R.id.cbNewExerciseD);
 
         btNewExerciseSave.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String exerciseDays = "|";
+                StringBuilder exerciseDays = new StringBuilder("0|");
 
-                if (cbNewExerciseSunday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.sunday_db) + "|");
+                if (cbNewExerciseA.isChecked())
+                    exerciseDays.append(getString(R.string.a_db) + "|");
 
-                if (cbNewExerciseMonday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.monday_db) + "|");
+                if (cbNewExerciseB.isChecked())
+                    exerciseDays.append(getString(R.string.b_db) + "|");
 
-                if (cbNewExerciseTuesday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.tuesday_db) + "|");
+                if (cbNewExerciseC.isChecked())
+                    exerciseDays.append(getString(R.string.c_db) + "|");
 
-                if (cbNewExerciseWednesday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.wednesday_db) + "|");
+                if (cbNewExerciseD.isChecked())
+                    exerciseDays.append(getString(R.string.d_db) + "|");
 
-                if (cbNewExerciseThursday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.thursday_db) + "|");
-
-                if (cbNewExerciseFriday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.friday_db) + "|");
-
-                if (cbNewExerciseSaturday.isChecked())
-                    exerciseDays.concat(getResources().getString(R.string.saturday_db) + "|");
-
-                //todo refactor to new method
-                if (machineId[0] != -1) {
-                    if (!sqLiteHelper.insertExerciseData(machineId[0], exerciseDays)) {
-                        Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(mContext, getResources().getString(R.string.exercise_save_success), Toast.LENGTH_LONG).show();
-                        dialogNewExercise.dismiss();
-                    }
-                } else {
-                    Toast.makeText(mContext, getResources().getString(R.string.no_machine_selected), Toast.LENGTH_LONG).show();
+                if (saveExercise(machineId[0], exerciseDays.toString())) {
+                    dialogNewExercise.dismiss();
                 }
             }
         });
@@ -328,6 +306,28 @@ public class MainActivity extends AppCompatActivity {
 
         dialogNewExercise.setCanceledOnTouchOutside(true);
         dialogNewExercise.show();
+    }
+
+    private Boolean saveExercise(int machineId, String days) {
+        if (machineId != -1) {
+            if (sqLiteHelper.selectExerciseByMachineDays(machineId, days).length() > 0) {
+                Toast.makeText(mContext, getResources().getString(R.string.exercise_exists), Toast.LENGTH_SHORT).show();
+                return false;
+
+            } else {
+                if (!sqLiteHelper.insertExerciseData(machineId, days)) {
+                    Toast.makeText(mContext, getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                    return false;
+
+                } else {
+                    Toast.makeText(mContext, getResources().getString(R.string.exercise_save_success), Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            }
+        } else {
+            Toast.makeText(mContext, getResources().getString(R.string.no_machine_selected), Toast.LENGTH_LONG).show();
+            return false;
+        }
     }
 
     private void onLvWorkoutsLongClick(){
