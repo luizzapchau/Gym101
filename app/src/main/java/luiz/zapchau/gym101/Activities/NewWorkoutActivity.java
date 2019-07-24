@@ -3,6 +3,7 @@ package luiz.zapchau.gym101.Activities;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,7 +86,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
     private void initComponents() {
         Date mDate = new Date();
 
-        tieNewWorkoutDate.setText(setDate(mDate));
+        tieNewWorkoutDate.setText(formatDate(mDate));
 
         List<StringWithTag> exerciseList = sqLiteHelper.selectAllExerciseSpinner();
 
@@ -142,11 +144,13 @@ public class NewWorkoutActivity extends AppCompatActivity {
     public void edtNewWorkoutDateOnClick() {
         tilNewWorkoutDateLayout.setError(null);
 
+        Locale.setDefault(getResources().getConfiguration().getLocales().get(0));
+
         new DatePickerDialog(mContext, R.style.luiz_date_picker_dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 mCalendar.set(year, monthOfYear, dayOfMonth);
-                tieNewWorkoutDate.setText(setDate(mCalendar.getTime()));
+                tieNewWorkoutDate.setText(formatDate(mCalendar.getTime()));
             }
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -160,7 +164,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
     public void btNewWorkoutSaveOnClick() {
         if (checkFields()) {
             if (sqLiteHelper.insertWorkoutData(
-                    mCalendar                       .getTime().toString(),
+                    formatDate(mCalendar.getTime()),
                     exerciseId[0],
                     tieNewWorkoutSets               .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutSets       .getText().toString()),
                     tieNewWorkoutRepetitions        .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutRepetitions.getText().toString()),
@@ -221,7 +225,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
         return canLeave[0];
     }
 
-    private String setDate(Date mDate) {
+    private String formatDate(Date mDate) {
         SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("EEEE, MMMM dd yyyy");
 
         return mSimpleDateFormat.format(mDate);

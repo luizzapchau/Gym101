@@ -33,6 +33,10 @@
     <string name="saturday_db">sat</string>
     <string name="sunday_db">sun</string>
 
+    <!--SP=======================================================================================-->
+    <string name="sp_name">sp_gym101</string>
+    <string name="sp_default_date">defaultdate</string>
+
     <!--general==================================================================================-->
     <string name="date">Date</string>
     <string name="exercise_name">Exercise name</string>
@@ -74,6 +78,8 @@
     <string name="yes_caps">YES</string>
     <string name="no_caps">NO</string>
     <string name="id">_id</string>
+    <string name="default_date">Monday, Jan 01 1990</string>
+    <string name="today">Today</string>
 
 
 </resources>

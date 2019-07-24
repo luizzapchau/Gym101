@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 import luiz.zapchau.gym101.Adapter.WorkoutAdapter;
 import luiz.zapchau.gym101.Controller.MenuController;
 import luiz.zapchau.gym101.Helper.SQLiteHelper;
+import luiz.zapchau.gym101.Helper.SharedPreferencesHelper;
 import luiz.zapchau.gym101.Model.StringWithTag;
 import luiz.zapchau.gym101.Model.Workout;
 import luiz.zapchau.gym101.R;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SQLiteHelper sqLiteHelper;
     private Context      mContext;
+    private SharedPreferencesHelper sharedPreferencesHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         sqLiteHelper = new SQLiteHelper(this);
         mContext = this;
+        sharedPreferencesHelper = new SharedPreferencesHelper();
 
         initSpeedDial(savedInstanceState == null);
 
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sharedPreferencesHelper.spSetString(mContext, getResources().getString(R.string.sp_default_date), getResources().getString(R.string.default_date));
+
         loadWorkoutList();
     }
 
@@ -101,19 +106,19 @@ public class MainActivity extends AppCompatActivity {
 
         if (addActionItems) {
             speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_workout, R.drawable.workout)
-                    .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightGreen, getTheme()))
-                    .setLabel(mContext.getResources().getString(R.string.new_workout))
-                    .create());
+                         .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightGreen, getTheme()))
+                         .setLabel(mContext.getResources().getString(R.string.new_workout))
+                         .create());
 
             speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_exercise, R.drawable.exercise)
-                    .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightCyan, getTheme()))
-                    .setLabel(mContext.getResources().getString(R.string.new_exercise))
-                    .create());
+                         .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightCyan, getTheme()))
+                         .setLabel(mContext.getResources().getString(R.string.new_exercise))
+                         .create());
 
             speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_machine, R.drawable.machine)
-                    .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightPink, getTheme()))
-                    .setLabel(mContext.getResources().getString(R.string.new_machine))
-                    .create());
+                         .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLightPink, getTheme()))
+                         .setLabel(mContext.getResources().getString(R.string.new_machine))
+                         .create());
         }
 
         speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
@@ -261,6 +266,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //todo add exercise letter A B C D
+
         Button btNewExerciseSave   = ButterKnife.findById(dialogNewExercise, R.id.btDialogNewExerciseSave);
         Button btNewExerciseCancel = ButterKnife.findById(dialogNewExercise, R.id.btDialogNewExerciseCancel);
 
@@ -328,8 +335,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final TextView tvWorkoutId = ButterKnife.findById(view, R.id.tvWorkoutId);
-
-                final int workoutId = Integer.parseInt(tvWorkoutId.getText().toString());
+                final int      workoutId   = Integer    .parseInt(tvWorkoutId.getText().toString());
 
                 new AlertDialog.Builder(mContext, R.style.luiz_dialog)
                         .setMessage(R.string.delete_confirmation)

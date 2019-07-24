@@ -1,7 +1,6 @@
 package luiz.zapchau.gym101.Adapter;
 
 import android.content.Context;
-import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import luiz.zapchau.gym101.Helper.SharedPreferencesHelper;
 import luiz.zapchau.gym101.Model.Workout;
 import luiz.zapchau.gym101.R;
 
@@ -25,6 +25,7 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         Workout workout = getItem(position);
+        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper();
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_workouts, parent, false);
@@ -40,7 +41,7 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         TextView     tvUnit                = convertView.findViewById(R.id.tvWorkoutUnitWeightSpeed);
         TextView     tvDate                = convertView.findViewById(R.id.tvWorkoutDate);
         LinearLayout llDate                = convertView.findViewById(R.id.llDate);
-        Date         lastDate                  = new Date();
+        String       lastDate              = sharedPreferencesHelper.spGetString(getContext(), getContext().getString(R.string.sp_default_date), getContext().getResources().getString(R.string.default_date));
 
         assert workout != null;
         tvWorkoutId      .setText(workout.id);
@@ -49,9 +50,17 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         tvMachineName    .setText(workout.machineName);
         tvMachineNumber  .setText(workout.machineNumber);
         tvWeightSpeed    .setText(workout.weight);
-        tvDate           .setText(workout.date);
 
-        //todo compare dates then set llDate visibility to gone if the date is the same as the last item
+        if (workout.date.equals(formatDate(new Date())))
+            workout.date = getContext().getResources().getString(R.string.today);
+
+        if (lastDate.equals(workout.date)) {
+            llDate.setVisibility(View.GONE);
+        } else {
+            tvDate                 .setText      (workout.date);
+            llDate                 .setVisibility(View.VISIBLE);
+            sharedPreferencesHelper.spSetString  (getContext(), getContext().getString(R.string.sp_default_date), workout.date);
+        }
 
         if (Integer.parseInt(workout.sets) != -1) {
             tvWorkoutSetsTime    .setText(workout.sets);
@@ -79,5 +88,11 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         }
 
         return convertView;
+    }
+
+    private String formatDate(Date mDate) {
+        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("EEEE, MMMM dd yyyy");
+
+        return mSimpleDateFormat.format(mDate);
     }
 }

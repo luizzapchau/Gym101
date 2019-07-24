@@ -410,20 +410,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public void temp(){
-        String createTableWorkout  = "CREATE TABLE "     + TB_WORKOUT + "(" +
-                WORKOUT_ID          + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                WORKOUT_DATE        + " TEXT NOT NULL, " +
-                WORKOUT_EXERCISE    + " INTEGER, " +
-                WORKOUT_SETS        + " INTEGER, " +
-                WORKOUT_REPETITIONS + " INTEGER, " +
-                WORKOUT_WEIGHT      + " REAL, " +
-                WORKOUT_TIME        + " TEXT, " +
-                WORKOUT_DISTANCE    + " REAL, " +
-                WORKOUT_SPEED       + " REAL, " +
-                "FOREIGN KEY (" + WORKOUT_EXERCISE + ") " +
-                "REFERENCES " + TB_EXERCISE + "(" + EXERCISE_ID + "));";
-
-        db.execSQL(createTableWorkout);
 
     }
 }
