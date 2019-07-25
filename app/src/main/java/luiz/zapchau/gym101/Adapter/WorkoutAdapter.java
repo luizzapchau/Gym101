@@ -48,11 +48,10 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         String       lastDate              = sharedPreferencesHelper.spGetString(getContext(), getContext().getString(R.string.sp_default_date), getContext().getResources().getString(R.string.default_date));
 
         assert workout != null;
-        tvWorkoutId      .setText(workout.id);
-        tvExerciseId     .setText(workout.exerciseId);
-        tvMachineId      .setText(workout.machineId);
-        tvMachineName    .setText(workout.machineName);
-        tvWeightSpeed    .setText(workout.weight);
+        tvWorkoutId  .setText(workout.id);
+        tvExerciseId .setText(workout.exerciseId);
+        tvMachineId  .setText(workout.machineId);
+        tvMachineName.setText(workout.machineName);
 
         if (Integer.parseInt(workout.machineNumber) != -1) {
             tvMachineNumber.setText(workout.machineNumber);

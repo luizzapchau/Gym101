@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        sqLiteHelper = new SQLiteHelper(this);
         mContext = this;
+        sqLiteHelper = new SQLiteHelper(mContext);
         sharedPreferencesHelper = new SharedPreferencesHelper();
 
         initSpeedDial(savedInstanceState == null);
@@ -75,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadWorkoutList() {
-        ArrayList<Workout> arrayOfShows   = new ArrayList<>();
-        WorkoutAdapter     workoutAdapter = new WorkoutAdapter(this, arrayOfShows);
-        ArrayList<Workout> newShow        = Workout.fromJson(sqLiteHelper.selectAllWorkout());
+        WorkoutAdapter workoutAdapter = new WorkoutAdapter(this, new ArrayList<Workout>());
 
         lvWorkouts    .setAdapter(workoutAdapter);
-        workoutAdapter.addAll(newShow);
+        workoutAdapter.addAll(Workout.fromJson(sqLiteHelper.selectAllWorkout()));
     }
 
     @Override

@@ -18,7 +18,7 @@
         android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/iv_new_workout_close"
+            android:id="@+id/ivNewWorkoutClose"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
@@ -32,14 +32,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
-            android:layout_toRightOf="@+id/iv_new_workout_close"
+            android:layout_toRightOf="@+id/ivNewWorkoutClose"
             android:text="@string/new_workout"
             android:textColor="@color/colorAccentText"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/bt_new_workout_save"
+            android:id="@+id/btNewWorkoutSave"
             style="@style/luiz_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -89,16 +89,40 @@
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/llNewWorkoutExercise"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="55dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:paddingHorizontal="24dp">
+            android:orientation="horizontal"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="8dp">
 
-            <Spinner
-                android:id="@+id/spNewWorkoutMachine"
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/exercise"
+                android:tint="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tvNewWorkoutExercise"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/colorPrimaryText" />
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/select_exercise"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvNewWorkoutExerciseId"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="-1"
+                android:visibility="gone" />
 
         </LinearLayout>
 

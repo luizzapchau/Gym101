@@ -13,28 +13,28 @@ public class SharedPreferencesHelper {
         return mContext.getSharedPreferences(mContext.getResources().getString(R.string.sp_name), Context.MODE_PRIVATE);
     }
 
-    public void spSetInt(Context mContext, String key, int valor){
+    public void spSetInt(Context mContext, String key, int value){
         sharedPreferences = mSharedPreferences(mContext);
         spEditor = sharedPreferences.edit();
-        spEditor.putInt(key, valor);
+        spEditor.putInt(key, value);
         spEditor.apply();
     }
 
-    public void spSetString(Context mContext, String key, String valor){
+    public void spSetString(Context mContext, String key, String value){
         sharedPreferences = mSharedPreferences(mContext);
         spEditor = sharedPreferences.edit();
-        spEditor.putString(key, valor);
+        spEditor.putString(key, value);
         spEditor.apply();
     }
 
-    public int spGetInt(Context mContext, String key, int valorDefault){
+    public int spGetInt(Context mContext, String key, int defaultValue){
         sharedPreferences = mSharedPreferences(mContext);
-        return sharedPreferences.getInt(key, valorDefault);
+        return sharedPreferences.getInt(key, defaultValue);
     }
 
-    public String spGetString(Context mContext, String key, String valorDefault){
+    public String spGetString(Context mContext, String key, String defaultValue){
         sharedPreferences = mSharedPreferences(mContext);
-        return sharedPreferences.getString(key, valorDefault);
+        return sharedPreferences.getString(key, defaultValue);
     }
 
     public void spRemoveValue(Context mContext, String key){

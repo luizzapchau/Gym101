@@ -91,10 +91,10 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                                      WORKOUT_EXERCISE    + " INTEGER, " +
                                      WORKOUT_SETS        + " INTEGER, " +
                                      WORKOUT_REPETITIONS + " INTEGER, " +
-                                     WORKOUT_WEIGHT      + " REAL, " +
+                                     WORKOUT_WEIGHT      + " TEXT, " +
                                      WORKOUT_TIME        + " TEXT, " +
                                      WORKOUT_DISTANCE    + " REAL, " +
-                                     WORKOUT_SPEED       + " REAL, " +
+                                     WORKOUT_SPEED       + " TEXT, " +
                                      "FOREIGN KEY (" + WORKOUT_EXERCISE + ") " +
                                      "REFERENCES " + TB_EXERCISE + "(" + EXERCISE_ID + "));";
 
@@ -158,7 +158,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         return db.insert(TB_EXERCISE, null, contentValues) != -1;
     }
 
-    public boolean insertWorkoutData(String date, int exercise, int sets, int repetitions, float weight, String time, float distance, float speed) {
+    public boolean insertWorkoutData(String date, int exercise, int sets, int repetitions, String weight, String time, float distance, String speed) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(WORKOUT_DATE       , date);
@@ -233,17 +233,18 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         return cursorToList(db.rawQuery(select, null));
     }
 
-    public List<StringWithTag> selectAllExerciseSpinner(){
+    public JSONArray selectAllExerciseList(){
         String select = "SELECT " + TB_EXERCISE + "." + EXERCISE_ID + ", " + EXERCISE_MACHINE + ", " + EXERCISE_DAYS + ", " +
-                        TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER +
+                        TB_MACHINE + "." + MACHINE_NAME + ", " + TB_MACHINE + "." + MACHINE_NUMBER + ", " + TB_MACHINE + "." + MACHINE_COLOR +
                         " FROM " + TB_EXERCISE +
                         " JOIN " + TB_MACHINE +
                         " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE + "." + MACHINE_ID +
                         " ORDER BY " + MACHINE_NUMBER;
 
-        return cursorToList(db.rawQuery(select, null));
+        return cursorToJSA(db.rawQuery(select, null));
     }
 
+    //todo fix order by
     public JSONArray selectAllWorkout() {
         String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + WORKOUT_EXERCISE + ", " +
                         WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " +
@@ -253,7 +254,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                         " FROM " + TB_WORKOUT +
                         " JOIN " + TB_EXERCISE + " ON " + TB_WORKOUT  + "." + WORKOUT_EXERCISE + " = " + TB_EXERCISE + "." + EXERCISE_ID +
                         " JOIN " + TB_MACHINE  + " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE  + "." + MACHINE_ID  +
-                        " ORDER BY " + WORKOUT_DATE + " DESC";
+                        " ORDER BY CAST(" + WORKOUT_DATE + " AS DATETIME) DESC";
 
         return cursorToJSA(db.rawQuery(select, null));
     }
@@ -307,7 +308,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
             return true;
     }
 
-    public boolean updateWorkout(int id, String date, int exercise, int sets, int repetitions, float weight, String time, float distance, float speed){
+    public boolean updateWorkout(int id, String date, int exercise, int sets, int repetitions, String weight, String time, float distance, String speed){
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(WORKOUT_DATE       , date);

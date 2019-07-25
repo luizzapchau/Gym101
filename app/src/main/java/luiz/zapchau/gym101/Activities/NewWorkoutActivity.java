@@ -3,7 +3,7 @@ package luiz.zapchau.gym101.Activities;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -11,35 +11,30 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luiz.zapchau.gym101.Helper.SQLiteHelper;
-import luiz.zapchau.gym101.Model.StringWithTag;
+import luiz.zapchau.gym101.Helper.SharedPreferencesHelper;
 import luiz.zapchau.gym101.R;
 
 public class NewWorkoutActivity extends AppCompatActivity {
 
-    @BindView(R.id.iv_new_workout_close)      ImageView         ivNewWorkoutClose;
-    @BindView(R.id.bt_new_workout_save)       Button            btNewWorkoutSave;
+    @BindView(R.id.ivNewWorkoutClose)      ImageView         ivNewWorkoutClose;
+    @BindView(R.id.btNewWorkoutSave)       Button            btNewWorkoutSave;
     @BindView(R.id.tilNewWorkoutSetsLayout)   TextInputLayout   tilNewWorkoutSetsLayout;
     @BindView(R.id.tilNewWorkoutWeightLayout) TextInputLayout   tilNewWorkoutWeightLayout;
     @BindView(R.id.tilNewWorkoutSpeedLayout)  TextInputLayout   tilNewWorkoutSpeedLayout;
@@ -51,15 +46,16 @@ public class NewWorkoutActivity extends AppCompatActivity {
     @BindView(R.id.tieNewWorkoutSets)         TextInputEditText tieNewWorkoutSets;
     @BindView(R.id.tieNewWorkoutTime)         TextInputEditText tieNewWorkoutTime;
     @BindView(R.id.tieNewWorkoutDistance)     TextInputEditText tieNewWorkoutDistance;
-    @BindView(R.id.spNewWorkoutMachine)       Spinner spNewWorkoutExercise;
+    @BindView(R.id.tvNewWorkoutExercise)      TextView          tvNewWorkoutExercise;
+    @BindView(R.id.tvNewWorkoutExerciseId)    TextView          tvNewWorkoutExerciseId;
     @BindView(R.id.llSetsRepetitions)         LinearLayout      llSetsRepetitions;
     @BindView(R.id.llTimeDistance)            LinearLayout      llTimeDistance;
     @BindView(R.id.tvNewWorkoutUnit)          TextView          tvNewWorkoutUnit;
 
-    private Calendar     mCalendar;
-    private Context      mContext;
-    private SQLiteHelper sqLiteHelper;
-    private int[] exerciseId;
+    private Calendar                mCalendar;
+    private Context                 mContext;
+    private SQLiteHelper            sqLiteHelper;
+    private SharedPreferencesHelper spHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +65,16 @@ public class NewWorkoutActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mContext     = this;
-        sqLiteHelper = new SQLiteHelper(this);
-        exerciseId   = new int[1];
+        sqLiteHelper = new SQLiteHelper(mContext);
         mCalendar    = new GregorianCalendar();
+        spHelper     = new SharedPreferencesHelper();
 
         mCalendar.setTime(new Date());
 
-        initComponents();
-    }
+        tieNewWorkoutDate.setText(formatDate(new Date()));
 
-    //TODO change spinner for list on exercises
+        resetSP();
+    }
 
     @Override
     public void onBackPressed() {
@@ -86,48 +82,17 @@ public class NewWorkoutActivity extends AppCompatActivity {
             super.onBackPressed();
     }
 
-    private void initComponents() {
-        Date mDate = new Date();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        tieNewWorkoutDate.setText(formatDate(mDate));
-
-        List<StringWithTag> exerciseList = sqLiteHelper.selectAllExerciseSpinner();
-
-        if (exerciseList.isEmpty())
-            exerciseList.add(0, new StringWithTag(getResources().getString(R.string.no_exercises), -1));
-
-        ArrayAdapter<StringWithTag> spAdapter = new ArrayAdapter<>(mContext, R.layout.spinner_item_large, exerciseList);
-
-        spAdapter           .setDropDownViewResource(R.layout.spinner_item);
-        spNewWorkoutExercise.setAdapter(spAdapter);
-
-        exerciseId[0] = -1;
-
-        spNewWorkoutExercise.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                StringWithTag swt = (StringWithTag) parent.getItemAtPosition(position);
-
-                exerciseId[0] = (Integer) swt.tag;
-
-                checkTreadmill(swt.string);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Blank
-            }
-        });
+        setExercise();
+        checkTreadmill();
     }
 
-    private void checkTreadmill(String machineName) {
-        String[] machineNameSplit = machineName.split(" - ");
-        int i = 0;
-
-        if (machineNameSplit.length > 1)
-            i = 1;
-
-        if (!machineNameSplit[i].toLowerCase().trim().equals(getResources().getString(R.string.treadmill))) {
+    public void checkTreadmill() {
+        if (!spHelper.spGetString(mContext, getResources().getString(R.string.sp_machine_name),
+                getResources().getString(R.string.select_exercise)).toLowerCase().trim().contains(getResources().getString(R.string.treadmill))) {
             llSetsRepetitions        .setVisibility(View.VISIBLE);
             llTimeDistance           .setVisibility(View.GONE);
             tilNewWorkoutWeightLayout.setVisibility(View.VISIBLE);
@@ -141,6 +106,11 @@ public class NewWorkoutActivity extends AppCompatActivity {
             tilNewWorkoutSpeedLayout .setVisibility(View.VISIBLE);
             tvNewWorkoutUnit         .setText(getResources().getString(R.string.km_h));
         }
+    }
+
+    @OnClick(R.id.llNewWorkoutExercise)
+    public void llNewWorkoutExerciseOnClick() {
+        startActivity(new Intent(mContext, ExerciseListActivity.class));
     }
 
     @OnClick(R.id.tieNewWorkoutDate)
@@ -158,23 +128,23 @@ public class NewWorkoutActivity extends AppCompatActivity {
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    @OnClick(R.id.iv_new_workout_close)
+    @OnClick(R.id.ivNewWorkoutClose)
     public void ivNewWorkoutCloseOnClick() {
         NewWorkoutActivity.this.onBackPressed();
     }
 
-    @OnClick(R.id.bt_new_workout_save)
+    @OnClick(R.id.btNewWorkoutSave)
     public void btNewWorkoutSaveOnClick() {
         if (checkFields()) {
             if (sqLiteHelper.insertWorkoutData(
                     formatDate(mCalendar.getTime()),
-                    exerciseId[0],
-                    tieNewWorkoutSets               .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutSets       .getText().toString()),
-                    tieNewWorkoutRepetitions        .getText().toString().isEmpty() ? -1  : Integer.parseInt  (tieNewWorkoutRepetitions.getText().toString()),
-                    tieNewWorkoutWeight             .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutWeight.getText().toString()),
-                    tieNewWorkoutTime               .getText().toString().isEmpty() ? "0" :                    tieNewWorkoutTime       .getText().toString(),
-                    tieNewWorkoutDistance           .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutDistance   .getText().toString()),
-                    tieNewWorkoutSpeed              .getText().toString().isEmpty() ? -1  : Float  .parseFloat(tieNewWorkoutSpeed      .getText().toString()))) {
+                    tvNewWorkoutExerciseId   .getText().toString().isEmpty() ? -1   : Integer.parseInt  (tvNewWorkoutExerciseId  .getText().toString()),
+                    tieNewWorkoutSets        .getText().toString().isEmpty() ? -1   : Integer.parseInt  (tieNewWorkoutSets       .getText().toString()),
+                    tieNewWorkoutRepetitions .getText().toString().isEmpty() ? -1   : Integer.parseInt  (tieNewWorkoutRepetitions.getText().toString()),
+                    tieNewWorkoutWeight      .getText().toString().isEmpty() ? "-1" :                    tieNewWorkoutWeight     .getText().toString(),
+                    tieNewWorkoutTime        .getText().toString().isEmpty() ? "0"  :                    tieNewWorkoutTime       .getText().toString(),
+                    tieNewWorkoutDistance    .getText().toString().isEmpty() ? -1   : Float  .parseFloat(tieNewWorkoutDistance   .getText().toString()),
+                    tieNewWorkoutSpeed       .getText().toString().isEmpty() ? "-1" :                    tieNewWorkoutSpeed      .getText().toString())) {
 
                 Toast.makeText(mContext, getResources().getString(R.string.workout_save_success), Toast.LENGTH_LONG).show();
 
@@ -193,7 +163,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
             return false;
         }
 
-        if (exerciseId[0] == -1) {
+        if (Integer.parseInt(tvNewWorkoutExerciseId.getText().toString()) == -1) {
             Toast.makeText(mContext, getResources().getString(R.string.no_exercise_selected), Toast.LENGTH_LONG).show();
 
             return false;
@@ -232,5 +202,19 @@ public class NewWorkoutActivity extends AppCompatActivity {
         SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("EEEE, MMMM dd yyyy");
 
         return mSimpleDateFormat.format(mDate);
+    }
+
+    private void resetSP() {
+        spHelper.spSetInt   (mContext, getResources().getString(R.string.sp_exercise_id)   , -2);
+        spHelper.spSetString(mContext, getResources().getString(R.string.sp_machine_name)  , getResources().getString(R.string.default_machine_name));
+        spHelper.spSetString(mContext, getResources().getString(R.string.sp_machine_number), getResources().getString(R.string.default_machine_number));
+    }
+
+    private void setExercise() {
+        if (spHelper.spGetInt(mContext, getResources().getString(R.string.sp_exercise_id), -2) != -2) {
+            tvNewWorkoutExerciseId.setText(String.valueOf(spHelper.spGetInt(mContext, getResources().getString(R.string.sp_exercise_id), -2)));
+            tvNewWorkoutExercise.setText(spHelper.spGetString(mContext, getResources().getString(R.string.sp_machine_number), "") +
+            " - " + spHelper.spGetString(mContext, getResources().getString(R.string.sp_machine_name), getResources().getString(R.string.error_caps)));
+        }
     }
 }
