@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import luiz.zapchau.gym101.Helper.SharedPreferencesHelper;
 import luiz.zapchau.gym101.Model.Exercise;
 import luiz.zapchau.gym101.R;
 
@@ -22,6 +23,7 @@ public class ExerciseAdapter extends ArrayAdapter<Exercise> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         Exercise exercise = getItem(position);
+        SharedPreferencesHelper spHelper = new SharedPreferencesHelper();
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_exercises, parent, false);
@@ -30,6 +32,7 @@ public class ExerciseAdapter extends ArrayAdapter<Exercise> {
         TextView     tvMachineName   = convertView.findViewById(R.id.tvExerciseMachineName);
         TextView     tvMachineNumber = convertView.findViewById(R.id.tvExerciseMachineNumber);
         LinearLayout llDay           = convertView.findViewById(R.id.llDay);
+        TextView     tvDay           = convertView.findViewById(R.id.tvExerciseDay);
 
         assert exercise != null;
         tvExerciseId .setText(exercise.id);
@@ -52,6 +55,14 @@ public class ExerciseAdapter extends ArrayAdapter<Exercise> {
 
         } else if (exercise.machineColor.equals(getContext().getString(R.string.red).toLowerCase())) {
             tvMachineNumber.setBackgroundColor(getContext().getColor(R.color.colorRed));
+        }
+
+        if (spHelper.spGetString(getContext(), getContext().getString(R.string.sp_default_exercise_day), "").equals(exercise.days)) {
+            llDay.setVisibility(View.GONE);
+        } else {
+            tvDay                 .setText      (exercise.days.toUpperCase());
+            llDay                 .setVisibility(View.VISIBLE);
+            spHelper.spSetString  (getContext(), getContext().getString(R.string.sp_default_exercise_day), exercise.days);
         }
 
         return convertView;

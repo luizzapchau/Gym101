@@ -45,7 +45,6 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         TextView     tvDayC                = convertView.findViewById(R.id.tvWorkoutDayC);
         TextView     tvDayD                = convertView.findViewById(R.id.tvWorkoutDayD);
         LinearLayout llDate                = convertView.findViewById(R.id.llDate);
-        String       lastDate              = sharedPreferencesHelper.spGetString(getContext(), getContext().getString(R.string.sp_default_date), getContext().getResources().getString(R.string.default_date));
 
         assert workout != null;
         tvWorkoutId  .setText(workout.id);
@@ -62,7 +61,8 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         if (workout.date.equals(formatDate(new Date())))
             workout.date = getContext().getResources().getString(R.string.today);
 
-        if (lastDate.equals(workout.date)) {
+        if (sharedPreferencesHelper.spGetString(getContext(), getContext().getString(R.string.sp_default_date),
+                getContext().getResources().getString(R.string.default_date)).equals(workout.date)) {
             llDate.setVisibility(View.GONE);
         } else {
             tvDate                 .setText      (workout.date);

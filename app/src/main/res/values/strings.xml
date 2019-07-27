@@ -97,6 +97,7 @@
     <string name="c_caps">C</string>
     <string name="d_caps">D</string>
     <string name="error_caps">ERROR</string>
+    <string name="sp_default_exercise_day">defaultexerciseday</string>
 
 
 </resources>

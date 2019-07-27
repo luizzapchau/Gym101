@@ -45,15 +45,16 @@ public class Workout {
     }
 
     public static ArrayList<Workout> fromJson(JSONArray jsonObjects) {
-        ArrayList<Workout> workout = new ArrayList<>();
+        ArrayList<Workout> workouts = new ArrayList<>();
 
         for (int i = 0; i < jsonObjects.length(); i++) {
             try {
-                workout.add(new Workout(jsonObjects.getJSONObject(i)));
+                workouts.add(new Workout(jsonObjects.getJSONObject(i)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return workout;
+
+        return workouts;
     }
 }

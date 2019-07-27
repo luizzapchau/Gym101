@@ -1,12 +1,15 @@
 package luiz.zapchau.gym101.Activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -38,8 +41,15 @@ public class ExerciseListActivity extends AppCompatActivity {
         sqLiteHelper = new SQLiteHelper(mContext);
         spHelper     = new SharedPreferencesHelper();
 
-        loadExerciseList();
+        spHelper.spSetString(mContext, getResources().getString(R.string.sp_default_exercise_day), "");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         onLvExerciseOnClick();
+        loadExerciseList();
     }
 
     private void loadExerciseList() {
@@ -54,11 +64,12 @@ public class ExerciseListActivity extends AppCompatActivity {
         this.onBackPressed();
     }
 
-    //todo check click on A instead of exercise
+    //todo fix
     private void onLvExerciseOnClick() {
         lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 final TextView tvExerciseId    = ButterKnife.findById(view, R.id.tvExerciseId);
                 final TextView tvMachineName   = ButterKnife.findById(view, R.id.tvExerciseMachineName);
                 final TextView tvMachineNumber = ButterKnife.findById(view, R.id.tvExerciseMachineNumber);
@@ -71,4 +82,6 @@ public class ExerciseListActivity extends AppCompatActivity {
             }
         });
     }
+
+    //todo delete on long click (check for workouts using exercise)
 }
