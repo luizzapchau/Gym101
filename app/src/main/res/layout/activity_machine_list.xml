@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.ExerciseListActivity">
+    android:layout_height="match_parent"
+    tools:context=".Activities.MachineListActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/ivExerciseClose"
+            android:id="@+id/ivMachineClose"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
@@ -27,13 +27,12 @@
             android:src="@drawable/close" />
 
         <TextView
-            android:id="@+id/tvExerciseListTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
-            android:layout_toRightOf="@+id/ivExerciseClose"
-            android:text="@string/exercise_list"
+            android:layout_toRightOf="@+id/ivMachineClose"
+            android:text="@string/machine_list"
             android:textColor="@color/colorAccentText"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -41,7 +40,7 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/lvExercises"
+        android:id="@+id/lvMachines"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark" />

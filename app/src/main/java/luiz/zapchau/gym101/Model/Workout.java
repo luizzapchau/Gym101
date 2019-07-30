@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Workout {
     public String id;
@@ -44,6 +45,7 @@ public class Workout {
         }
     }
 
+    //todo sort
     public static ArrayList<Workout> fromJson(JSONArray jsonObjects) {
         ArrayList<Workout> workouts = new ArrayList<>();
 

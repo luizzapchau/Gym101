@@ -185,52 +185,86 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     //region select
     public JSONObject selectMachine(int id) {
-        String select = "SELECT * " +
-                        "FROM " + TB_MACHINE +
-                        " WHERE " + MACHINE_ID + " = " + id;
+        String select = "SELECT *" +
+                        " FROM "   + TB_MACHINE +
+                        " WHERE "  + MACHINE_ID + " = " + id;
 
         return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectUser(int id) {
-        String select = "SELECT * " +
-                        "FROM " + TB_USER +
-                        " WHERE " + USER_ID + " = " + id;
+        String select = "SELECT *" +
+                        " FROM "   + TB_USER +
+                        " WHERE "  + USER_ID + " = " + id;
 
         return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectExercise(int id) {
-        String select = "SELECT * " +
-                        " FROM " + TB_EXERCISE +
-                        " WHERE " + EXERCISE_ID + " = " + id;
+        String select = "SELECT *" +
+                        " FROM "   + TB_EXERCISE +
+                        " WHERE "  + EXERCISE_ID + " = " + id;
 
         return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectExerciseByMachineDays(int machineId, String days) {
-        String select = "SELECT * " +
-                        " FROM " + TB_EXERCISE +
-                        " WHERE " + EXERCISE_MACHINE + " = " + machineId +
-                        " AND " + EXERCISE_DAYS + " = \"" + days +"\"";
+        String select = "SELECT *" +
+                        " FROM "   + TB_EXERCISE +
+                        " WHERE "  + EXERCISE_MACHINE + " = " + machineId +
+                        " AND "    + EXERCISE_DAYS + " = \"" + days +"\"";
 
         return cursorToJSO(db.rawQuery(select,null), false);
     }
 
     public JSONObject selectWorkout(int id) {
-        String select = "SELECT * " +
-                        "FROM " + TB_WORKOUT +
-                        " WHERE " + WORKOUT_ID + " = " + id;
+        String select = "SELECT *" +
+                        " FROM "   + TB_WORKOUT +
+                        " WHERE "  + WORKOUT_ID + " = " + id;
 
         return cursorToJSO(db.rawQuery(select,null), false);
     }
 
+    public Boolean selectWorkoutByExercise(int exerciseId) {
+        String select = "SELECT *" +
+                        " FROM "   + TB_WORKOUT +
+                        " WHERE "  + WORKOUT_EXERCISE + " = " + exerciseId;
+
+        return db.rawQuery(select,null).getCount() > 0 ? true : false;
+    }
+
+    public Boolean selectExerciseByMachine(int machineId) {
+        String select = "SELECT *" +
+                        " FROM "   + TB_EXERCISE +
+                        " WHERE "  + EXERCISE_MACHINE + " = " + machineId;
+
+        return db.rawQuery(select,null).getCount() > 0 ? true : false;
+    }
+
+    public Boolean selectDuplicateMachine(String machineName, String machineNumber, String machineColor) {
+        String select = "SELECT *" +
+                        " FROM "   + TB_MACHINE +
+                        " WHERE "  + MACHINE_NAME   + " = \"" + machineName   + "\"" +
+                        " AND "    + MACHINE_NUMBER + " = "   + machineNumber +
+                        " AND "    + MACHINE_COLOR  + " = \"" + machineColor  + "\"";
+
+        return db.rawQuery(select, null).getCount() > 0 ? true : false;
+    }
+
     public List<StringWithTag> selectAllMachineSpinner() {
-        String select = "SELECT * " +
-                        "FROM " + TB_MACHINE +
+        String select = "SELECT *"   +
+                        " FROM "     + TB_MACHINE +
                         " ORDER BY " + MACHINE_NUMBER;
 
         return cursorToList(db.rawQuery(select, null));
+    }
+
+    public JSONArray selectAllMachineList() {
+        String select = "SELECT *"   +
+                        " FROM "     + TB_MACHINE +
+                        " ORDER BY " + MACHINE_NUMBER;
+
+        return cursorToJSA(db.rawQuery(select, null));
     }
 
     public JSONArray selectAllExerciseList(){
@@ -244,7 +278,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         return cursorToJSA(db.rawQuery(select, null));
     }
 
-    //todo fix order by
     public JSONArray selectAllWorkout() {
         String select = "SELECT " + TB_WORKOUT + "." + WORKOUT_ID + ", " + WORKOUT_DATE + ", " + WORKOUT_EXERCISE + ", " +
                         WORKOUT_SETS + ", " + WORKOUT_REPETITIONS + ", " + WORKOUT_WEIGHT + ", " + WORKOUT_TIME + ", " +
@@ -254,14 +287,14 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                         " FROM " + TB_WORKOUT +
                         " JOIN " + TB_EXERCISE + " ON " + TB_WORKOUT  + "." + WORKOUT_EXERCISE + " = " + TB_EXERCISE + "." + EXERCISE_ID +
                         " JOIN " + TB_MACHINE  + " ON " + TB_EXERCISE + "." + EXERCISE_MACHINE + " = " + TB_MACHINE  + "." + MACHINE_ID  +
-                        " ORDER BY CAST(" + WORKOUT_DATE + " AS DATETIME) DESC";
+                        " ORDER BY " + WORKOUT_DATE;
 
         return cursorToJSA(db.rawQuery(select, null));
     }
 
     public JSONArray selectAllWeight() {
-        String select = "SELECT * " +
-                        " FROM " + TB_WEIGHT +
+        String select = "SELECT *"   +
+                        " FROM "     + TB_WEIGHT +
                         " ORDER BY " + WEIGHT_DATE;
 
         return cursorToJSA(db.rawQuery(select, null));
@@ -334,7 +367,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public void deleteMachineEntry(int id){
-        db.delete(TB_WEIGHT, MACHINE_ID + " = ? ", new String[]{Integer.toString(id)});
+        db.delete(TB_MACHINE, MACHINE_ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
     public void deleteExerciseEntry(int id){
@@ -344,19 +377,6 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     public void deleteWorkoutEntry(int id){
         db.delete(TB_WORKOUT, WORKOUT_ID + " = ? ", new String[]{Integer.toString(id)});
     }
-
-    public void deleteWeightEntry(int id){
-        db.delete(TB_WEIGHT, WEIGHT_ID + " = ? ", new String[]{Integer.toString(id)});
-    }
-
-    public void deleteAllWeightData() {
-        db.delete(TB_WEIGHT, null, null);
-    }
-
-    public void deleteAllWorkoutData() {
-        db.delete(TB_WORKOUT, null, null);
-    }
-    //
     //endregion
 
     private String getDate(){

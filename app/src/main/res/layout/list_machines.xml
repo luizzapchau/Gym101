@@ -6,44 +6,28 @@
     android:weightSum="1">
 
     <LinearLayout
-        android:id="@+id/llDay"
-        android:layout_width="match_parent"
-        android:layout_height="20dp">
-
-        <TextView
-            android:id="@+id/tvExerciseDay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="center_horizontal"
-            android:text="@string/a_caps"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/colorPrimary"
         android:foreground="?attr/selectableItemBackground"
+        android:longClickable="true"
+        android:orientation="horizontal"
         android:paddingEnd="16dp">
 
         <TextView
-            android:id="@+id/tvExerciseMachineNumber"
+            android:id="@+id/tvMachineNumber"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:background="@color/colorAccent"
             android:gravity="center"
+            android:background="@color/colorAccent"
             android:text="99"
             android:textSize="26sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvExerciseMachineName"
+            android:id="@+id/tvMachineName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/tvExerciseMachineNumber"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
@@ -55,12 +39,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvExerciseId"
+            android:id="@+id/tvMachineId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-2"
             android:visibility="gone" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

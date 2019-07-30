@@ -3,8 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="luiz.zapchau.gym101.Activities.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/mMachineList"
+        android:icon="@drawable/machine"
+        android:iconTint="@color/colorAccent"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/machine_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mExerciseList"
+        android:icon="@drawable/exercise"
+        android:iconTint="@color/colorAccent"
+        android:orderInCategory="200"
+        android:title="@string/exercise_list"
         app:showAsAction="never" />
 </menu>

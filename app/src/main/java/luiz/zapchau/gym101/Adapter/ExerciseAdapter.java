@@ -16,8 +16,8 @@ import luiz.zapchau.gym101.R;
 
 public class ExerciseAdapter extends ArrayAdapter<Exercise> {
 
-    public ExerciseAdapter(Context mContext, ArrayList<Exercise> shows){
-        super(mContext, 0, shows);
+    public ExerciseAdapter(Context mContext, ArrayList<Exercise> exercises){
+        super(mContext, 0, exercises);
     }
 
     @Override

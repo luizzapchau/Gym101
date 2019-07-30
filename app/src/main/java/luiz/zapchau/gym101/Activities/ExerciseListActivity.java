@@ -24,11 +24,13 @@ import luiz.zapchau.gym101.R;
 
 public class ExerciseListActivity extends AppCompatActivity {
 
-    @BindView(R.id.lvExercises) ListView lvExercises;
+    @BindView(R.id.lvExercises)         ListView lvExercises;
+    @BindView(R.id.tvExerciseListTitle) TextView tvTitle;
 
     private Context                 mContext;
     private SQLiteHelper            sqLiteHelper;
     private SharedPreferencesHelper spHelper;
+    private Boolean                 isNewWorkout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class ExerciseListActivity extends AppCompatActivity {
         mContext     = this;
         sqLiteHelper = new SQLiteHelper(mContext);
         spHelper     = new SharedPreferencesHelper();
+        isNewWorkout = getIntent().getExtras().getBoolean(getString(R.string.is_new_workout));
 
         spHelper.spSetString(mContext, getResources().getString(R.string.sp_default_exercise_day), "");
     }
@@ -48,8 +51,13 @@ public class ExerciseListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        onLvExerciseOnClick();
         loadExerciseList();
+        onLvExercisesLongClick();
+
+        if (isNewWorkout) {
+            tvTitle.setText(getResources().getString(R.string.select_exercise));
+            onLvExerciseOnClick();
+        }
     }
 
     private void loadExerciseList() {
@@ -69,7 +77,6 @@ public class ExerciseListActivity extends AppCompatActivity {
         lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 final TextView tvExerciseId    = ButterKnife.findById(view, R.id.tvExerciseId);
                 final TextView tvMachineName   = ButterKnife.findById(view, R.id.tvExerciseMachineName);
                 final TextView tvMachineNumber = ButterKnife.findById(view, R.id.tvExerciseMachineNumber);
@@ -83,5 +90,47 @@ public class ExerciseListActivity extends AppCompatActivity {
         });
     }
 
-    //todo delete on long click (check for workouts using exercise)
+    private void onLvExercisesLongClick(){
+        lvExercises.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final TextView tvExerciseId = ButterKnife.findById(view, R.id.tvExerciseId);
+
+                    new AlertDialog.Builder(mContext, R.style.luiz_dialog)
+                        .setMessage(R.string.delete_exercise_confirmation)
+                        .setPositiveButton(R.string.yes_caps, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (!sqLiteHelper.selectWorkoutByExercise(Integer.parseInt(tvExerciseId.getText().toString()))) {
+                                    sqLiteHelper.deleteExerciseEntry(Integer.parseInt(tvExerciseId.getText().toString()));
+
+                                    Toast.makeText(mContext, getResources().getString(R.string.exercise_deleted), Toast.LENGTH_LONG).show();
+
+                                    onResume();
+                                } else {
+                                    new AlertDialog.Builder(mContext, R.style.luiz_dialog)
+                                        .setTitle(R.string.error)
+                                        .setMessage(R.string.exercise_has_workout)
+                                        .setPositiveButton(R.string.ok_caps, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                //blank
+                                            }
+                                        })
+                                        .show();
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.no_caps, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //blank
+                            }
+                        })
+                        .show();
+
+                return true;
+            }
+        });
+    }
 }

@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -124,13 +123,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
                 switch (speedDialActionItem.getId()) {
                     case R.id.fab_workout:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            //todo add animation
-                            startActivity(new Intent(mContext, NewWorkoutActivity.class));
-                        } else {
-                            startActivity(new Intent(mContext, NewWorkoutActivity.class));
-                        }
-
+                        startActivity(new Intent(mContext, NewWorkoutActivity.class));
                         speedDialView.close();
 
                         return true;
@@ -194,23 +187,30 @@ public class MainActivity extends AppCompatActivity {
         Button btNewMachineSave   = ButterKnife.findById(dialogNewMachine, R.id.btDialogNewMachineSave);
         Button btNewMachineCancel = ButterKnife.findById(dialogNewMachine, R.id.btDialogNewMachineCancel);
 
-        final TextInputEditText tieNewMachineNumber       = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineNumber);
-        final TextInputEditText tieNewMachineName         = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineName);
-        final TextInputLayout   tilNewMachineNameLayout   = ButterKnife.findById(dialogNewMachine, R.id.tilNewMachineNameLayout);
+        final TextInputEditText tieNewMachineNumber     = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineNumber);
+        final TextInputEditText tieNewMachineName       = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineName);
+        final TextInputLayout   tilNewMachineNameLayout = ButterKnife.findById(dialogNewMachine, R.id.tilNewMachineNameLayout);
 
         btNewMachineSave.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!tieNewMachineName.getText().toString().isEmpty()) {
-                    sqLiteHelper.insertMachineData(Integer.parseInt(!tieNewMachineNumber.getText().toString().isEmpty() ? tieNewMachineNumber.getText().toString() : "-1"),
+                    if (!sqLiteHelper.selectDuplicateMachine(tieNewMachineName.getText().toString(), tieNewMachineNumber.getText().toString(),
+                            spNewMachineColor.getSelectedItem().toString().toLowerCase())) {
+
+                        sqLiteHelper.insertMachineData(Integer.parseInt(!tieNewMachineNumber.getText().toString().isEmpty() ? tieNewMachineNumber.getText().toString() : "-1"),
                             tieNewMachineName.getText().toString(), spNewMachineColor.getSelectedItem().toString().toLowerCase());
 
-                    Toast.makeText(mContext, getResources().getString(R.string.machine_save_success), Toast.LENGTH_LONG).show();
-                    dialogNewMachine.dismiss();
+                        Toast.makeText(mContext, getResources().getString(R.string.machine_save_success), Toast.LENGTH_SHORT).show();
+                        dialogNewMachine.dismiss();
+                    } else {
+                        tilNewMachineNameLayout.setError(getString(R.string.duplicate_machine));
+                        tieNewMachineName.requestFocus();
+                    }
+//
                 } else {
                     tilNewMachineNameLayout.setError(getString(R.string.machine_name_not_empty));
                     tieNewMachineName.requestFocus();
-                    Toast.makeText(mContext, getResources().getString(R.string.machine_name_not_empty), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -309,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean saveExercise(int machineId, String days) {
         if (machineId != -1) {
             if (sqLiteHelper.selectExerciseByMachineDays(machineId, days).length() > 0) {
-                Toast.makeText(mContext, getResources().getString(R.string.exercise_exists), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, getResources().getString(R.string.duplicate_exercise), Toast.LENGTH_SHORT).show();
                 return false;
 
             } else {
@@ -332,30 +332,29 @@ public class MainActivity extends AppCompatActivity {
         lvWorkouts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final TextView tvWorkoutId = ButterKnife.findById(view, R.id.tvWorkoutId);
-                final int      workoutId   = Integer    .parseInt(tvWorkoutId.getText().toString());
+            final TextView tvWorkoutId = ButterKnife.findById(view, R.id.tvWorkoutId);
 
-                new AlertDialog.Builder(mContext, R.style.luiz_dialog)
-                        .setMessage(R.string.delete_confirmation)
-                        .setPositiveButton(R.string.yes_caps, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                sqLiteHelper.deleteWorkoutEntry(workoutId);
+            new AlertDialog.Builder(mContext, R.style.luiz_dialog)
+                .setMessage(R.string.delete_workout_confirmation)
+                .setPositiveButton(R.string.yes_caps, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sqLiteHelper.deleteWorkoutEntry(Integer.parseInt(tvWorkoutId.getText().toString()));
 
-                                Toast.makeText(mContext, getResources().getString(R.string.workout_deleted), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, getResources().getString(R.string.workout_deleted), Toast.LENGTH_LONG).show();
 
-                                onResume();
-                            }
-                        })
-                        .setNegativeButton(R.string.no_caps, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //blank
-                            }
-                        })
-                        .show();
+                        onResume();
+                    }
+                })
+                .setNegativeButton(R.string.no_caps, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //blank
+                    }
+                })
+                .show();
 
-                return true;
+            return true;
             }
         });
     }

@@ -19,8 +19,12 @@
         <activity
             android:name=".Activities.NewWorkoutActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.ExerciseListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activities.ExerciseListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.MachineListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

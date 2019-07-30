@@ -11,6 +11,8 @@
     <string name="exercise_save_success">Exercise saved with success.</string>
     <string name="workout_save_success">Workout saved with success.</string>
     <string name="workout_deleted">Workout entry deleted.</string>
+    <string name="exercise_deleted">Exercise entry deleted.</string>
+    <string name="machine_deleted">Machine entry deleted.</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
     <string name="data_lost_leave">All data provided will be lost. Leave anyway?</string>
     <string name="date_future">Date cannot be in the future.</string>
@@ -19,9 +21,14 @@
     <string name="no_machines">No machines saved</string>
     <string name="no_exercise_selected">No exercise was selected.</string>
     <string name="no_machine_selected">No machine was selected.</string>
-    <string name="delete_confirmation">Delete workout entry?</string>
-    <string name="exercise_exists">Exercise already exists.</string>
+    <string name="delete_workout_confirmation">Delete workout entry?</string>
+    <string name="delete_exercise_confirmation">Delete exercise entry?</string>
+    <string name="delete_machine_confirmation">Delete machine entry?</string>
+    <string name="duplicate_exercise">Exercise already exists.</string>
+    <string name="duplicate_machine">Machine already exists.</string>
     <string name="select_exercise">Select an exercise</string>
+    <string name="exercise_has_workout">This exercise cannot be deleted. It has one or more workouts linked to it.</string>
+    <string name="machine_has_exercise">This machine cannot be deleted. It has one or more exercises linked to it.</string>
 
     <!--DB==========================================================================-->
     <string name="machine_id_db">_id</string>
@@ -98,6 +105,11 @@
     <string name="d_caps">D</string>
     <string name="error_caps">ERROR</string>
     <string name="sp_default_exercise_day">defaultexerciseday</string>
+    <string name="ok_caps">OK</string>
+    <string name="error">Error</string>
+    <string name="is_new_workout">isNewWorkout</string>
+    <string name="exercise_list">Exercise list</string>
+    <string name="machine_list">Machine list</string>
 
 
 </resources>

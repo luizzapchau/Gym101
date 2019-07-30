@@ -110,7 +110,10 @@ public class NewWorkoutActivity extends AppCompatActivity {
 
     @OnClick(R.id.llNewWorkoutExercise)
     public void llNewWorkoutExerciseOnClick() {
-        startActivity(new Intent(mContext, ExerciseListActivity.class));
+        Intent intent = new Intent(mContext, ExerciseListActivity.class);
+
+        intent.putExtra(getString(R.string.is_new_workout), true);
+        startActivity(intent);
     }
 
     @OnClick(R.id.tieNewWorkoutDate)
@@ -146,7 +149,7 @@ public class NewWorkoutActivity extends AppCompatActivity {
                     tieNewWorkoutDistance    .getText().toString().isEmpty() ? -1   : Float  .parseFloat(tieNewWorkoutDistance   .getText().toString()),
                     tieNewWorkoutSpeed       .getText().toString().isEmpty() ? "-1" :                    tieNewWorkoutSpeed      .getText().toString())) {
 
-                Toast.makeText(mContext, getResources().getString(R.string.workout_save_success), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, getResources().getString(R.string.workout_save_success), Toast.LENGTH_SHORT).show();
 
                 super.onBackPressed();
             } else {
