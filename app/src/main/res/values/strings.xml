@@ -110,6 +110,7 @@
     <string name="is_new_workout">isNewWorkout</string>
     <string name="exercise_list">Exercise list</string>
     <string name="machine_list">Machine list</string>
+    <string name="no_day_selected">At least one day has to be selected.</string>
 
 
 </resources>

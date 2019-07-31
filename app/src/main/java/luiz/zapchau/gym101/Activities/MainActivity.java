@@ -1,5 +1,6 @@
 package luiz.zapchau.gym101.Activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,10 +15,12 @@ import android.support.v7.view.menu.MenuBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -191,22 +194,21 @@ public class MainActivity extends AppCompatActivity {
         final TextInputEditText tieNewMachineName       = ButterKnife.findById(dialogNewMachine, R.id.tieNewMachineName);
         final TextInputLayout   tilNewMachineNameLayout = ButterKnife.findById(dialogNewMachine, R.id.tilNewMachineNameLayout);
 
+        tieNewMachineNumber.requestFocus();
+
+        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
         btNewMachineSave.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!tieNewMachineName.getText().toString().isEmpty()) {
-                    if (!sqLiteHelper.selectDuplicateMachine(tieNewMachineName.getText().toString(), tieNewMachineNumber.getText().toString(),
-                            spNewMachineColor.getSelectedItem().toString().toLowerCase())) {
+                    sqLiteHelper.insertMachineData(Integer.parseInt(!tieNewMachineNumber.getText().toString().isEmpty() ? tieNewMachineNumber.getText().toString() : "-1"),
+                        tieNewMachineName.getText().toString(), spNewMachineColor.getSelectedItem().toString().toLowerCase());
 
-                        sqLiteHelper.insertMachineData(Integer.parseInt(!tieNewMachineNumber.getText().toString().isEmpty() ? tieNewMachineNumber.getText().toString() : "-1"),
-                            tieNewMachineName.getText().toString(), spNewMachineColor.getSelectedItem().toString().toLowerCase());
-
-                        Toast.makeText(mContext, getResources().getString(R.string.machine_save_success), Toast.LENGTH_SHORT).show();
-                        dialogNewMachine.dismiss();
-                    } else {
-                        tilNewMachineNameLayout.setError(getString(R.string.duplicate_machine));
-                        tieNewMachineName.requestFocus();
-                    }
+                    Toast.makeText(mContext, getResources().getString(R.string.machine_save_success), Toast.LENGTH_SHORT).show();
+                    hideKeyboard(tieNewMachineName);
+                    dialogNewMachine.dismiss();
 //
                 } else {
                     tilNewMachineNameLayout.setError(getString(R.string.machine_name_not_empty));
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         btNewMachineCancel.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard(tieNewMachineName);
                 dialogNewMachine.dismiss();
             }
         });
@@ -229,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dialogNewMachine.setCanceledOnTouchOutside(true);
+        dialogNewMachine.setCanceledOnTouchOutside(false);
         dialogNewMachine.show();
     }
 
@@ -276,21 +279,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 StringBuilder exerciseDays = new StringBuilder("0|");
+                Boolean       hasDays      = false;
 
-                if (cbNewExerciseA.isChecked())
+                if (cbNewExerciseA.isChecked()) {
                     exerciseDays.append(getString(R.string.a_db) + "|");
+                    hasDays = true;
+                }
 
-                if (cbNewExerciseB.isChecked())
+                if (cbNewExerciseB.isChecked()) {
                     exerciseDays.append(getString(R.string.b_db) + "|");
+                    hasDays = true;
+                }
 
-                if (cbNewExerciseC.isChecked())
+                if (cbNewExerciseC.isChecked()) {
                     exerciseDays.append(getString(R.string.c_db) + "|");
+                    hasDays = true;
+                }
 
-                if (cbNewExerciseD.isChecked())
+                if (cbNewExerciseD.isChecked()) {
                     exerciseDays.append(getString(R.string.d_db) + "|");
+                    hasDays = true;
+                }
 
-                if (saveExercise(machineId[0], exerciseDays.toString())) {
-                    dialogNewExercise.dismiss();
+                if (!hasDays) {
+                    Toast.makeText(mContext, getResources().getString(R.string.no_day_selected), Toast.LENGTH_LONG).show();
+                } else {
+                    if (saveExercise(machineId[0], exerciseDays.toString())) {
+                        dialogNewExercise.dismiss();
+                    }
                 }
             }
         });
@@ -357,6 +373,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
             }
         });
+    }
+
+    private void hideKeyboard(EditText editText) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 }
 

@@ -150,6 +150,7 @@
                     android:ellipsize="start"
                     android:hint="@string/sets"
                     android:inputType="number"
+                    android:nextFocusDown="@+id/tieNewWorkoutRepetitions"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
 
@@ -180,6 +181,7 @@
                     android:ellipsize="start"
                     android:hint="@string/repetitions"
                     android:inputType="number"
+                    android:nextFocusDown="@+id/tieNewWorkoutWeight"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
 
@@ -212,6 +214,7 @@
                     android:ellipsize="start"
                     android:hint="@string/time"
                     android:inputType="time"
+                    android:nextFocusDown="@+id/tieNewWorkoutDistance"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
 
@@ -242,6 +245,7 @@
                     android:ellipsize="start"
                     android:hint="@string/distance"
                     android:inputType="numberDecimal"
+                    android:nextFocusDown="@+id/tieNewWorkoutSpeed"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
 
